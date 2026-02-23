@@ -1,8 +1,8 @@
 # Azure Cosmos DB Specialist (DP-420) Study Guide
 
-Welcome! This repository contains a comprehensive collection of notes, architectural patterns, and hands-on insights for the DP-420: Designing and Implementing Cloud-Native Applications Using Microsoft Azure Cosmos DB certification.
+Welcome! These are elaborated notes for my DP-420 study and reference in future. It does not contain all the topics in the exam, but it covers the topics that I find important and useful and summarises the key concepts.
 
-Originally tracked as a private project, these notes are now open to the community to help everyone master the world of NoSQL on Azure.
+These notes are open to the community to contribute and improve.
 
 ## 📖 Table of Contents
 Currently migrating notes from [DP-420 Azure CosmosDB Study Guide](https://github.com/users/yoonghan/projects/9)
