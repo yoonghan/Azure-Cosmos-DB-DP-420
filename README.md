@@ -5,7 +5,7 @@ Welcome! This repository contains a comprehensive collection of notes, architect
 Originally tracked as a private project, these notes are now open to the community to help everyone master the world of NoSQL on Azure.
 
 ## 📖 Table of Contents
-Currently migrating notes from https://github.com/users/yoonghan/projects/4
+Currently migrating notes from [DP-420 Azure CosmosDB Study Guide](https://github.com/users/yoonghan/projects/9)
 
 ## 🚀 How to Contribute
 I am actively looking for peer reviews and updates! If you’ve recently taken the exam or found a better way to implement a pattern, please contribute:
