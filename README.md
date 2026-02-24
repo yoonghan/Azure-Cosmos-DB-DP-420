@@ -1,4 +1,4 @@
-# Azure Cosmos DB Specialist (DP-420) Study Guide
+# DP-420Azure Cosmos DB Specialist Study Guide
 
 Welcome! These are elaborated notes for my DP-420 study and reference in future. It may not contain all the topics in the exam, but it covers the topics that I find important. Notes are in point structures and summarises the key concepts.
 
