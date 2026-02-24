@@ -2,16 +2,17 @@
 
 ## Notes
 1. Container Must be re-created if:
+    - Change partition key
+    - Change conflict resolution policy
+    - Change unique index
+    - Change vector search
+    - Change disk encryption
 
-    a. Change partition key
-
-    b. Change conflict resolution policy
-
-    c. Change unique index
-
-    d. Change vector search
-
-    e. Change disk encryption
+2. Multi Region replication is not supported if:
+    - Continous backup - new version can support this.
+    - Service manage failover - Service-managed failover is NOT supported for multi-region write, as there shouldn't be a failover for write for that. Makes sense as it is already active-active/ha why need auto.
+    - No Strong consistency - strong consistency cannot be supported
+    - Cassandra API cannot support it
 
 ## Useful keywords in Microsoft Learn
 
