@@ -19,7 +19,7 @@ az cosmosdb sql role assignment create --resource-group "<RESOURCE_GROUP_NAME>" 
 2. Create the database named `cosmicworks` manually.
 You must create the database manually "cosmicworks", there are no options for you to skip this only via Az CLI/ARM/Bicep/Terraform. There is no permission available to create DB.
 
-3. (Doesn't workd) To assign DB Operator custom role required for Data Plane to insert/update/delete container. However this role no longer works in the latest Azure Portal. Use CLI/master key/ARM/Bicep/Terraform instead to create/update a container.
+3. (Doesn't work) You need to assign DB Operator custom role required to insert/update/delete container. However this does not work in SDK as SDK is a Data Plane SDK. Use CLI/master key/ARM/Bicep/Terraform instead to create/update a container. Below will not work even assigned.
 ```
 az cosmosdb sql role definition create \
     --account-name "<COSMOS_DB_ACCOUNT_NAME>" \
