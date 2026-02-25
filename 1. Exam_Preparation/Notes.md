@@ -15,6 +15,7 @@
     - Cassandra API cannot support it
 
 ## Useful keywords in Microsoft Learn
+This is an exam that allows to use MS Learn. So be prepared to navigate to the right page.
 
 1. [Monitoring Data](https://learn.microsoft.com/en-us/azure/cosmos-db/monitor-reference?context=%2Fazure%2Fcosmos-db%2Fcontext%2Fcontext)
 
@@ -37,7 +38,7 @@ _Answer_: You can have a maximum of 1,000 properties across all nested levels in
 
 _Method_: Find in troubleshooting section for "Azure Synapse Analytics Serverless SQL Pool troubleshooting documentation".
 
-
+5. Just know that you cannot do Ctrl-F for find in MS Learn.
 
 ## Timing
 You have ONLY 2 hours to complete ~60 questions. With that you can only spend an average of 2 minutes per question, so time it properly and if the question seems simple enough just go thru it.
