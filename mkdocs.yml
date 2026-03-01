@@ -25,7 +25,7 @@ theme:
     - search.suggest
 
 nav:
-  - Home: README.md
+  - Home: index.md
   - Overview: 2. Overview.md
   - Replication: 3. Replication.md
 
