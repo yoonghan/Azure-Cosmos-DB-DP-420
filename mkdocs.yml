@@ -62,7 +62,7 @@ nav:
     - 34. Migration.md
   - Exam: 
     - 1. Exam_Preparation/Notes.md
-    - 2. Exam_Preparation/Skills_Outline.md
+    - 2. Exam_Preparation/Lab_Exercises.md
 markdown_extensions:
   - admonition
   - pymdownx.details
