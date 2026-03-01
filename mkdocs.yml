@@ -1,0 +1,35 @@
+site_name: Azure Cosmos DB (DP-420) Study Guide
+site_author: Han
+site_url: https://yoonghan.github.io/Azure-Cosmos-DB-DP-420/
+
+theme:
+  name: material
+  palette:
+    # Deep Azure Blue for a professional Microsoft feel
+    - scheme: default
+      primary: azure
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: azure
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - content.code.copy
+    - search.suggest
+
+nav:
+  - Home: README.md
+  - Overview: 2. Overview.md
+  - Replication: 3. Replication.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
