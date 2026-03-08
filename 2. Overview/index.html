@@ -1,0 +1,2301 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Han">
+      
+      
+        <link rel="canonical" href="https://yoonghan.github.io/Azure-Cosmos-DB-DP-420/2.%20Overview/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../3.%20Replication/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.4">
+    
+    
+      
+        <title>Overview - Azure Cosmos DB (DP-420) Study Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#overview" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-header__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Azure Cosmos DB (DP-420) Study Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Overview
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  Topics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../1.%20Exam_Preparation/Notes/" class="md-tabs__link">
+          
+  
+  
+  Exam
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-nav__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Azure Cosmos DB (DP-420) Study Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#database-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Database Types
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hierarchy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope-of-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope of Control
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capacity-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capacity Mode
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Capacity Mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#serverless" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serverless
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#provisioned-throughput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provisioned throughput
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#switching-capacity-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Switching Capacity Mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#differences-of-vcoreru-and-managed-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Differences of VCore/RU and Managed Instance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vcore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VCore
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#managed-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Managed Instance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#concept-of-vcore-managed-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concept of VCore / Managed Instance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shared-throughput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared Throughput
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#free-tier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FREE Tier
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoscale-provisioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Autoscale provisioning
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-set-the-maximum-autoscale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to set the maximum autoscale
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limit
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%20Replication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20Conflict_Handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.%20Analytics_Connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Azure Analytics Connectivity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.%20CosmosDB_Emulator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emulator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.%20CosmosDB_Roles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.%20InnerWorks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Innerworks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.%20Integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.%20Designing%20Database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Designing Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.%20SDK%20Errors%20Codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDK Error Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12.%20Batch%20Transaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Batch Transaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13.%20Bulk%20Execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bulk Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14.%20Queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Queries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15.%20Indexing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Indexing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16.%20Time%20To%20Live/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time To Live (TTL)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17.%20Partition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Partition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18.%20Request%20Unit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Request Unit (RU)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19.%20Gateway%20Mode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gateway Mode
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20.%20Rest%20API/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rest API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21.%20Security%20and%20Encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security And Encryption
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../22.%20Backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../23.%20Consistency/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consistency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../24.%20Change%20Feed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Change Feed
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../25.%20CLI%20Command/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../26.%20DeveloperTools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../27.%20Stored%20Procedure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store Procedures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../28.%20UDF%20and%20Triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UDF and Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../29.%20Features%20And%20Implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature and Implementations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../30.%20Vector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../31.%20Cognitive%20Search/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cognitive Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../32.%20Troubleshooting%20And%20Monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monitoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../33.%20Authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../34.%20Migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Exam
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Lab_Exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hands-on Labs Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#database-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Database Types
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hierarchy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope-of-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope of Control
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capacity-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capacity Mode
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Capacity Mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#serverless" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serverless
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#provisioned-throughput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provisioned throughput
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#switching-capacity-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Switching Capacity Mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#differences-of-vcoreru-and-managed-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Differences of VCore/RU and Managed Instance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vcore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VCore
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#managed-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Managed Instance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#concept-of-vcore-managed-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concept of VCore / Managed Instance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shared-throughput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared Throughput
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#free-tier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FREE Tier
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoscale-provisioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Autoscale provisioning
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-set-the-maximum-autoscale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to set the maximum autoscale
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limit
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="overview">Overview</h1>
+<p>Historically it was called DocumentDB, due to marketing it was renamed. Roles and some APIs still uses DocumentDB.</p>
+<h2 id="database-types">Database Types</h2>
+<p>There are 5 types of database in Azure Cosmos DB:
+  1. SQL (Core) API (exam primarily focus on this)
+  2. MongoDB API
+  3. Cassandra API
+  4. Gremlin API
+  5. Table API</p>
+<h2 id="hierarchy">Hierarchy</h2>
+<p>An "Account" is the primary distribution/availability.</p>
+<div class="highlight"><pre><span></span><code>Account (replication, consistency)
+  -&gt; Database (throughput)
+    -&gt; Container (all throughput)
+      -&gt; Item
+</code></pre></div>
+<h2 id="scope-of-control">Scope of Control</h2>
+<table>
+<thead>
+<tr>
+<th>Scope of Control</th>
+<th>Replication (Regions)</th>
+<th>Consistency Level (Default)</th>
+<th>Consistency Level (Override)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Account Level</td>
+<td>YES (Add/Remove Regions, Single/Multi-write setting)</td>
+<td>YES (Sets the default for everything)</td>
+<td>NO (Only for individual requests)</td>
+</tr>
+<tr>
+<td>DB / Container Level</td>
+<td>NO</td>
+<td>NO</td>
+<td>NO</td>
+</tr>
+<tr>
+<td>Request Level</td>
+<td>NO</td>
+<td>NO</td>
+<td>YES (Can relax the account default for reads)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="capacity-mode">Capacity Mode</h2>
+<h3 id="serverless">Serverless</h3>
+<ul>
+<li>Serverless compute integration with a service like Azure Functions</li>
+<li><strong>ONLY</strong> max 1TB per container</li>
+<li><strong>NO</strong> Geo replication</li>
+<li>Performance on write slower that is 30ms compared to 10ms on write. Read is 10ms on both Provisioned and Serverless.</li>
+<li>Billing is pay per-use compared to per-hour.</li>
+<li>Cannot do <strong>periodic backup</strong> only <strong>continuous backup</strong>. </li>
+<li>MAX at 5000 RU per <strong>physical</strong> partition in a container. Complex to calculate, if want to know max RU need to calculate how many physical partition there is.</li>
+</ul>
+<p>$$\text{Max Throughput (RU/s)} = \text{Number of Physical Partitions} \times 5,000$$</p>
+<h3 id="provisioned-throughput">Provisioned throughput</h3>
+<ul>
+<li>Unlimited storage.</li>
+<li>Split to:</li>
+<li><strong>Manual</strong><ul>
+<li>much cheaper 0.8 per RU/s</li>
+</ul>
+</li>
+<li><strong>Autoscale</strong> <ul>
+<li>expensive at 0.12 per RU/s</li>
+<li>billing is charged per/hour on the highest/max</li>
+</ul>
+</li>
+</ul>
+<h3 id="switching-capacity-mode">Switching Capacity Mode</h3>
+<p>You <strong>can</strong> switch a Cosmos DB account from Serverless to Provisioned Throughput (either Manual or Autoscale).
+You <strong>cannot</strong> switch a Cosmos DB account back from Provisioned Throughput to Serverless. This is an irreversible operation.</p>
+<h2 id="differences-of-vcoreru-and-managed-instance">Differences of VCore/RU and Managed Instance</h2>
+<p>Just glance thru, the exam focuses more on RU.
+Difference between RU and Managed/VCore is replication:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>vCore-based Model (Dedicated Instances)</th>
+<th>RU-based Model (Shared Throughput)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>In-Region HA</td>
+<td>Manual/Synchronous. You must explicitly enable High Availability (HA) for production clusters. When enabled, each shard maintains a hot-standby replica in a different Availability Zone (AZ). Replication between primary and standby is synchronous, guaranteeing zero data loss on failover.</td>
+<td>Automatic/Synchronous (Behind the scenes). Data is automatically replicated across fault domains and upgrade domains within a region. The service manages this process transparently to provide high availability.</td>
+</tr>
+<tr>
+<td>Cross-Region Replication</td>
+<td>Active-Passive (Asynchronous). You create a read-only replica cluster in a different region. Data is replicated asynchronously from the primary cluster to the replica. You must manually promote the replica to become the new primary in the event of a regional disaster (Disaster Recovery).</td>
+<td>Active-Active (Synchronous/Asynchronous). You can configure multi-region writes (active-active) where every region can accept writes. The internal replication is handled by the platform, offering a choice of five consistency levels (Strong, Bounded Staleness, Session, Consistent Prefix, Eventual).</td>
+</tr>
+<tr>
+<td>Sharding</td>
+<td>Supports sharding to scale the cluster horizontally with a vCore-based architecture familiar to native MongoDB users.</td>
+<td>Supports automatic, server-side sharding for "limitless" horizontal scalability, with the service managing shard creation and balancing.</td>
+</tr>
+<tr>
+<td>Disaster Recovery</td>
+<td>Requires manual promotion of a cross-region replica. As replication is asynchronous, there is a possibility of minimal data loss if the primary region fails before the last few writes are replicated.</td>
+<td>Offers automatic regional failover and recovery with no downtime for multi-region write accounts, depending on the chosen consistency level.</td>
+</tr>
+<tr>
+<td>Consistency Control</td>
+<td>Adheres to the consistency models of the underlying MongoDB architecture (typically <strong>Strong Consistency</strong> within a replica set/shard, <strong>but Eventual Consistency for cross-region reads)</strong>.</td>
+<td>Offers five tunable consistency levels (<strong>Strong, Bounded Staleness, Session, Consistent Prefix, and Eventual</strong>) to balance performance and data fidelity.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vcore">VCore</h2>
+<p>VCore are only featured for MongoDB and PostgreSQL
+PostgreSQL is only vCore (no RU) where a fixed vCPU/RAM is assigned.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>vCore-based Model</th>
+<th>RU-based Model (Provisioned/Autoscale/Serverless)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary Resource</td>
+<td>Dedicated compute resources (vCPUs, RAM, and Storage).</td>
+<td>Throughput expressed in Request Units (RUs) per second.</td>
+</tr>
+<tr>
+<td>Billing</td>
+<td>Consistent flat fee based on provisioned vCores/nodes and storage.</td>
+<td>Based on RUs: either a fixed amount (Provisioned) or RUs consumed (Serverless).</td>
+</tr>
+<tr>
+<td>Scaling</td>
+<td>Vertical and horizontal scaling of cluster tiers (vCPUs/RAM/Storage).</td>
+<td>Limitless horizontal scaling based on RUs and data size.</td>
+</tr>
+<tr>
+<td>Workload Focus</td>
+<td>Predictable performance, complex queries, and lift-and-shift migrations.</td>
+<td>Cloud-native apps, high-volume point reads, and instantaneous scaling.</td>
+</tr>
+<tr>
+<td>Availability</td>
+<td>Typically offers 99.995% SLA.</td>
+<td>Offers an industry-leading 99.999% SLA for mission-critical apps.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="managed-instance">Managed Instance</h2>
+<p>Cassandara has Managed Instance(Virtual Machine to run so need choose SKU) and RU(choose throughput) only.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Azure Managed Instance for Apache Cassandra</th>
+<th>Azure Cosmos DB for Apache Cassandra (RU/s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Underlying Platform</td>
+<td>Pure open-source Apache Cassandra. You can use native features.</td>
+<td>Azure Cosmos DB's cloud-native engine, with a Cassandra-compatible API layer.</td>
+</tr>
+<tr>
+<td>Pricing Model</td>
+<td>Instance-based (billed by the number and size of Virtual Machines/nodes).</td>
+<td>Throughput-based (billed by Request Units per second or RU/s).</td>
+</tr>
+<tr>
+<td>Compatibility</td>
+<td>100% feature-compatible with native Apache Cassandra. Best for lift-and-shift.</td>
+<td>High wire-protocol compatibility, but behaves differently (e.g., no compaction).</td>
+</tr>
+<tr>
+<td>Scaling</td>
+<td>Scale by adding or removing VM nodes; scaling is managed but involves VM-level operations.</td>
+<td>Scales elastically and instantly by increasing or decreasing the provisioned RU/s.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="concept-of-vcore-managed-instance">Concept of VCore / Managed Instance</h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A Managed Instance is defined by vCores.</td>
+<td>When you provision a Managed Instance, you must select the vCore purchasing model. You then choose the number of vCores (e.g., 8 vCores, 16 vCores) to power that instance.</td>
+</tr>
+<tr>
+<td>vCores are the engine; the Managed Instance is the car.</td>
+<td>The Managed Instance provides the feature set (the "SQL Server experience"), and the vCores provide the performance (the CPU and RAM).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="shared-throughput">Shared Throughput</h2>
+<p>After the first 25 containers, you can add more containers to the database only if they're <a href="https://learn.microsoft.com/en-us/azure/cosmos-db/set-throughput#set-throughput-on-a-database-and-a-container">provisioned with dedicated throughput</a>, which is separate from the shared throughput of the database.</p>
+<p><img alt="Shared Throughput" src="../img/overview_shared_throughput.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Standard (manual) throughput on a database</th>
+<th>Standard (manual) throughput on a container</th>
+<th>Autoscale throughput on a database</th>
+<th>Autoscale throughput on a container</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entry point (minimum RU/s)</td>
+<td>400 RU/s. Can have up to 25 containers with no RU/s minimum per container.</td>
+<td>400</td>
+<td>Autoscale between 100 - 1000 RU/s. Can have up to 25 containers with no RU/s minimum per container.</td>
+<td>Autoscale between 100 - 1000 RU/s.</td>
+</tr>
+<tr>
+<td>Minimum RU/s per container</td>
+<td>--</td>
+<td>400</td>
+<td>--</td>
+<td>Autoscale between 100 - 1000 RU/s</td>
+</tr>
+<tr>
+<td>Maximum RUs</td>
+<td>Unlimited, on the database.</td>
+<td>Unlimited, on the container.</td>
+<td>Unlimited, on the database.</td>
+<td>Unlimited, on the container.</td>
+</tr>
+<tr>
+<td>RUs assigned or available to a specific container</td>
+<td>No guarantees. RUs assigned to a given container depend on the properties. Properties can be the choice of partition keys of containers that share the throughput, the distribution of the workload, and the number of containers.</td>
+<td>All the RUs configured on the container are exclusively reserved for the container.</td>
+<td>No guarantees. RUs assigned to a given container depend on the properties. Properties can be the choice of partition keys of containers that share the throughput, the distribution of the workload, and the number of containers.</td>
+<td>All the RUs configured on the container are exclusively reserved for the container.</td>
+</tr>
+<tr>
+<td>Maximum storage for a container</td>
+<td>Unlimited</td>
+<td>Unlimited</td>
+<td>Unlimited</td>
+<td>Unlimited</td>
+</tr>
+<tr>
+<td>Maximum throughput per logical partition of a container</td>
+<td>10K RU/s</td>
+<td>10K RU/s</td>
+<td>10K RU/s</td>
+<td>10K RU/s</td>
+</tr>
+<tr>
+<td>Maximum storage (data + index) per logical partition of a container</td>
+<td>20 GB</td>
+<td>20 GB</td>
+<td>20 GB</td>
+<td>20 GB</td>
+</tr>
+</tbody>
+</table>
+<h2 id="free-tier">FREE Tier</h2>
+<p>Yes, there is a Lifetime Free Tier
+You must opt-in: You must explicitly choose the Free Tier discount when you create the Azure Cosmos DB account.</p>
+<p>One per subscription: You are limited to one Free Tier account per Azure subscription.</p>
+<p>Duration: The free tier lasts for the lifetime of that specific Cosmos DB account. It does not expire after 12 months like the general Azure Free Account.</p>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Free Tier Limit</th>
+<th>Cost Implication</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Throughput (RU/s)</td>
+<td>The first 1,000 RU/s provisioned.</td>
+<td>FREE</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>The first 25 GB of data storage.</td>
+<td>FREE</td>
+</tr>
+</tbody>
+</table>
+<p>Only first 1k and 25G, if exceed will charge as normal.</p>
+<h2 id="autoscale-provisioning">Autoscale provisioning</h2>
+<p>Why not manual since auto is great:
+1. more expensive 0.12.
+2. billing is charged per/hour on the highest/max. E.g. if normally you use only 4k RU but one second peak of 6k the whole hour charge is 6k RU/s.</p>
+<h2 id="how-to-set-the-maximum-autoscale">How to set the maximum autoscale</h2>
+<ol>
+<li>Min is always set 0.1% of the max. So 1000 RU is 100 minimum RU.</li>
+<li>Setting highest like 99999 have implications. E.g. You set 10k max RU, if your average RU is using only 4k is actually used but you are always billed at 10k. It's because the buffer allow too much spike and even 1 second 10k your bill goes insane expensive. The best is to set about 4.5k or 5k and billing can be saved.</li>
+</ol>
+<h2 id="limit">Limit</h2>
+<p>This is as of 2026</p>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Your Value</th>
+<th>Current 2026 Limit</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Account (per Sub)</td>
+<td>50</td>
+<td>250</td>
+<td>The default is now 250, but it can be increased via support ticket to 1,000.</td>
+</tr>
+<tr>
+<td>Databases + Containers</td>
+<td>500 / 25</td>
+<td>500 Total</td>
+<td>This is a combined limit per account (e.g., 10 DBs and 490 Containers).</td>
+</tr>
+<tr>
+<td>Containers (Shared DB)</td>
+<td>25</td>
+<td>25</td>
+<td>Only applies to databases using Shared Throughput. Dedicated containers are unlimited (up to the 500 account limit).</td>
+</tr>
+<tr>
+<td>Max RU per Partition</td>
+<td>10,000</td>
+<td>10,000 RU/s</td>
+<td>This applies to both Logical and Physical partitions.</td>
+</tr>
+<tr>
+<td>Logical Partition Size</td>
+<td>20GB</td>
+<td>20GB</td>
+<td>This is a hard limit. Exceeding this triggers a "Partition Key reached maximum size" error.</td>
+</tr>
+<tr>
+<td>Physical Partition Size</td>
+<td>50GB</td>
+<td>50GB</td>
+<td>When a physical partition hits 50GB, Cosmos DB automatically performs a "Partition Split."</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

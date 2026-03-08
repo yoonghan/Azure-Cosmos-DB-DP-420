@@ -1,0 +1,2145 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Han">
+      
+      
+        <link rel="canonical" href="https://yoonghan.github.io/Azure-Cosmos-DB-DP-420/3.%20Replication/">
+      
+      
+        <link rel="prev" href="../2.%20Overview/">
+      
+      
+        <link rel="next" href="../4.%20Conflict_Handling/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.4">
+    
+    
+      
+        <title>Replication - Azure Cosmos DB (DP-420) Study Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#replication" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-header__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Azure Cosmos DB (DP-420) Study Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Replication
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../2.%20Overview/" class="md-tabs__link">
+          
+  
+  
+  Topics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../1.%20Exam_Preparation/Notes/" class="md-tabs__link">
+          
+  
+  
+  Exam
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-nav__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Azure Cosmos DB (DP-420) Study Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.%20Overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replication
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#global-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global Distribution
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ru-cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RU Cost
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auto-failover" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto failover
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manual-vs-auto-failovers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual vs Auto Failovers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#applicationregion-and-applicationpreferredregion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ApplicationRegion and ApplicationPreferredRegion
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conflicts-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conflicts Handling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extra-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extra notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#switching-region-has-health-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Switching region has health checks.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failover-via-azure-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failover via Azure CLI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exam-tricky-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exam tricky questions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exam tricky questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging-latency-and-region" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debugging Latency and Region
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#global-vs-local-region-replication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global vs Local Region replication
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dynamic-quorum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dynamic Quorum
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#readwrite-of-consistency-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read/Write of Consistency level
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20Conflict_Handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.%20Analytics_Connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Azure Analytics Connectivity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.%20CosmosDB_Emulator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emulator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.%20CosmosDB_Roles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.%20InnerWorks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Innerworks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.%20Integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.%20Designing%20Database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Designing Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.%20SDK%20Errors%20Codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDK Error Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12.%20Batch%20Transaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Batch Transaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13.%20Bulk%20Execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bulk Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14.%20Queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Queries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15.%20Indexing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Indexing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16.%20Time%20To%20Live/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time To Live (TTL)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17.%20Partition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Partition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18.%20Request%20Unit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Request Unit (RU)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19.%20Gateway%20Mode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gateway Mode
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20.%20Rest%20API/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rest API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21.%20Security%20and%20Encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security And Encryption
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../22.%20Backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../23.%20Consistency/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consistency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../24.%20Change%20Feed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Change Feed
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../25.%20CLI%20Command/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../26.%20DeveloperTools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../27.%20Stored%20Procedure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Store Procedures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../28.%20UDF%20and%20Triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UDF and Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../29.%20Features%20And%20Implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature and Implementations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../30.%20Vector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../31.%20Cognitive%20Search/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cognitive Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../32.%20Troubleshooting%20And%20Monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monitoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../33.%20Authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../34.%20Migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Exam
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Lab_Exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hands-on Labs Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#global-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global Distribution
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ru-cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RU Cost
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auto-failover" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto failover
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manual-vs-auto-failovers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual vs Auto Failovers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#applicationregion-and-applicationpreferredregion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ApplicationRegion and ApplicationPreferredRegion
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conflicts-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conflicts Handling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extra-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extra notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#switching-region-has-health-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Switching region has health checks.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failover-via-azure-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failover via Azure CLI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exam-tricky-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exam tricky questions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exam tricky questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging-latency-and-region" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debugging Latency and Region
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#global-vs-local-region-replication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global vs Local Region replication
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dynamic-quorum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dynamic Quorum
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#readwrite-of-consistency-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read/Write of Consistency level
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="replication">Replication</h1>
+<h2 id="global-distribution">Global Distribution</h2>
+<ol>
+<li>Geo redundancy - only on paired region not global world (can choose region replication/different). Enable global distribution on your account by pairing West US 2 with West Central US. You can add more regions to your account later.</li>
+<li>Multi region write - multi write and read region, number of read = number of write region, it's paired.</li>
+<li>Availability Zone - replicate / auto balance (take note not all region have AZ, i.e. Sweden)</li>
+<li>The following options aren't available if you select Serverless as the Capacity mode:<ul>
+<li>Multi-region write</li>
+<li>Periodic backup</li>
+<li>Multi-region (not GRS)</li>
+</ul>
+</li>
+</ol>
+<p><img alt="Global Distribution" src="../img/replication.png" /></p>
+<h2 id="ru-cost">RU Cost</h2>
+<p>RU is costly for replication. Each region need to be accounted for RU. For standard provisioned throughput, the core formula is RU/s x # of regions. </p>
+<p>Example of 5 regions...+1 is because the main 1 is considered.</p>
+<div class="highlight"><pre><span></span><code>1,000 x (1+5) = 6,000
+</code></pre></div>
+<p>Autoscale benefits here as if per-region, some region that did not consumer large amount of RU, it can be charged less.</p>
+<h2 id="auto-failover">Auto failover</h2>
+<ol>
+<li>By default, automatic failover is not enabled for an Azure Cosmos DB account. Automatic failover must be enabled before defining a plan. Once enabled, the read regions can then be sorted by order of failover priority. After sorting, the new priority list can then be persisted and applied to the account.</li>
+<li>Region priorities doesn’t need to be in sequence, can be 2,5,10.</li>
+<li>Priority 0 is active write location.</li>
+<li>Once failover happens, it updates in background and old write region changes and remains as secondary permanently.</li>
+<li>If auto failover is enabled, you cannot change the write region.</li>
+<li>Auto failover is only available for single write region. For multi-region write, it defeats the purpose of failover since all the regions are active-active.</li>
+</ol>
+<p><img alt="Auto failover" src="../img/replication_auto_failover.png" /></p>
+<p>Write region</p>
+<table>
+<thead>
+<tr>
+<th>Region</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>West US 2</td>
+<td>0 (N/A - write region)</td>
+</tr>
+<tr>
+<td>East US</td>
+<td>1</td>
+</tr>
+<tr>
+<td>UK South</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<h2 id="manual-vs-auto-failovers">Manual vs Auto Failovers</h2>
+<ol>
+<li>Manual failover is like automatic failover setup, just have a checkbox "agree" for auto failover. Same to choose either read/write failover.</li>
+<li>If you perform a manual change-write region operation while an asynchronous throughput scaling operation is in progress, the throughput scale-up operation is paused. It resumes automatically when the failover operation is complete. </li>
+<li>In the event of a write region outage, use forced failover to change the write region.</li>
+<li><strong>Choose either Service OR Manual</strong>: You can't modify the write region (failover priority of zero) when the account is configured for service-managed failover. To change the write region, you must disable service-managed failover and do a manual failover.</li>
+<li>The Wait Time: Failover is not instantaneous. The service must detect the outage and confirm it is a regional failure. This typically takes up to 1 hour (though Microsoft often completes it much faster) for a service-managed failover.</li>
+<li>READ region is automatically promoted as write region (if single write region is configured.) Backup will switch to the new read region but usually won't be a problem as Periodic backup will switch depending on selection.</li>
+</ol>
+<h2 id="applicationregion-and-applicationpreferredregion">ApplicationRegion and ApplicationPreferredRegion</h2>
+<p>Code, there are difference between <strong>ApplicationRegion</strong> vs <strong>ApplicationPreferredRegion</strong>
+Take note SDK do not check latency if using PreferredRegion (newer SDK do attempt to write parallel to nearest region).</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Define the preferred application region</span>
+<span class="n">CosmosClientOptions</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">ApplicationRegion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;UK South&quot;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>or</p>
+<div class="highlight"><pre><span></span><code><span class="n">CosmosClient</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CosmosClientBuilder</span><span class="p">(</span><span class="n">accountEndpoint</span><span class="p">,</span><span class="w"> </span><span class="n">credential</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">WithApplicationPreferredRegions</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Regions</span><span class="p">.</span><span class="n">EastAsia</span><span class="p">,</span>
+<span class="w">        </span><span class="n">Regions</span><span class="p">.</span><span class="n">SouthAfricaNorth</span><span class="p">,</span>
+<span class="w">        </span><span class="n">Regions</span><span class="p">.</span><span class="n">WestUS</span>
+<span class="w">    </span><span class="p">})</span>
+<span class="w">    </span><span class="p">.</span><span class="n">Build</span><span class="p">();</span>
+</code></pre></div>
+<p>Take <strong>note</strong>:</p>
+<ol>
+<li>If you do not specify a preferred region, the SDK will automatically default to the primary region for your account. The primary region is the first region in the region list, and is typically the region you selected first when you created the Azure Cosmos DB account. </li>
+<li>If there are multi-write and multi-read region at account level setting, setting WithApplicationPreferredRegions will override account and change <em>both</em> read/write base on the SDK list. If there is only single write (it will only use the account) and ignore SDK list on write and only on account level.</li>
+<li>ApplicationPreferredRegions and ApplicationRegion cannot both be set.</li>
+<li>Any region in your SDK list that does not exist in the account metadata is simply ignored. No exception is thrown. E.g. account level has only UK and East US, but SDK defines West US in the preferred list...West US is ignored and only UK and East US is used.</li>
+<li>What happens if the entire list is invalid?
+If none of the regions you provided in ApplicationPreferredRegions exist in the account (or if they are all misspelled), the SDK follows a fail-safe path:</li>
+<li>Fallback to Primary: It will default to the Primary (Write) Region of the account.</li>
+<li>Read Availability: For read operations, if the primary is also not in your list, it will simply use whatever regions are available in the account to ensure the application doesn't crash</li>
+</ol>
+<h2 id="conflicts-handling">Conflicts Handling</h2>
+<p>See conflict handling.</p>
+<p><strong>NOTE</strong>: You can only set a conflict resolution policy on newly created </p>
+<p>Screenshot of how to configure region
+<img alt="Replication Multi Region" src="../img/replication_multi_region.png" /></p>
+<p>There is Service Failover
+<img alt="Service Failover" src="../img/replication_service_failover.png" /></p>
+<h2 id="extra-notes">Extra notes</h2>
+<ul>
+<li>is automatic failover equivalent to service failover - YES. If Enable Multi-Region Writes: ON then this service is disabled.</li>
+<li>When a new region is added, all data must be fully replicated and committed into the new region before the region is marked as available. The amount of time this operation takes depends upon how much data is stored within the account. If an <a href="https://learn.microsoft.com/en-us/azure/cosmos-db/scaling-provisioned-throughput-best-practices#background-on-scaling-rus">asynchronous throughput scaling operation</a> is in progress, the throughput scale-up operation is paused and resumes automatically when the add/remove region operation is complete. Additionally, when removing an existing region, all replication across regions (within <a href="https://learn.microsoft.com/en-us/azure/cosmos-db/global-dist-under-the-hood">partition sets</a>) must complete before the region is marked as unavailable.</li>
+</ul>
+<h2 id="switching-region-has-health-checks">Switching region has health checks.</h2>
+<p>These are the conditions.
+- If replication from 1 region to the other is not complete, it will fail. E.g. from single to multi it has to be completed before write region can be switched over.
+- The region is healthy to allow switching to priority=0</p>
+<h2 id="failover-via-azure-cli">Failover via Azure CLI</h2>
+<p>This script 'update' is nice, it allows to 
+- Add when you add --location
+- Remove when you ignore --location</p>
+<div class="highlight"><pre><span></span><code>az cosmosdb update -n $accountName -g $resourceGroupName \
+--locations regionName=&#39;West Europe&#39; failoverPriority=0 isZoneRedundant-False \
+--locations regionName=&#39;Nort Europe&#39; failoverPriority=1 isZoneRedundant-False
+</code></pre></div>
+<p>To enable multi-write just put
+<div class="highlight"><pre><span></span><code>... --enable-multiple-write-locations true
+//code is useMultipleWriteLocations
+</code></pre></div></p>
+<p>Caveat in write
+- cannot select write region
+- has to have at least 2 region
+- NO Strong consistency</p>
+<h2 id="exam-tricky-questions">Exam tricky questions</h2>
+<h3 id="example-1">Example 1</h3>
+<p>You are deploying App1 to a workstation in San Francisco.
+You need to make the Azure Cosmos DB client aware of multi region writes and select the closest Azure region.</p>
+<p>In this question you should deploy as there are no such thing as policy.SetCurrentLocation("San Francisco")
+<div class="highlight"><pre><span></span><code><span class="n">ConnectionPolicy</span><span class="w"> </span><span class="n">policy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionPolicy</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ConnectionMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ConnectionMode</span><span class="p">.</span><span class="n">Direct</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ConnectionProtocol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Protocol</span><span class="p">.</span><span class="n">Tcp</span><span class="p">,</span>
+<span class="w">        </span><span class="n">UseMultipleWriteLocations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="n">policy</span><span class="p">.</span><span class="n">SetCurrentLocation</span><span class="p">(</span><span class="s">&quot;West US&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">//Question may sometime trick by putting &quot;London&quot;, &quot;San Francisco&quot;</span>
+</code></pre></div></p>
+<h3 id="example2">Example2</h3>
+<ol>
+<li>
+<p>The application team created a brand new Azure Cosmos DB account with a write region in West US and two read regions in UK South and Japan East. The team made no further configuration changes from the default configuration for a new account. There's a current data center outage in West US. What failover action does Azure Cosmos DB do?</p>
+</li>
+<li>
+<p>Fail over to UK South</p>
+</li>
+<li>Nothing &lt;-- This is the answer, because only write region is down and there are no failover but read still runs.</li>
+<li>Fail over to Japan East</li>
+</ol>
+<h3 id="example-3">Example 3</h3>
+<p>For each application region, the team would like the .NET client app to select a specific region for read/write operations, and then have the SDK determine fallback regions based on their proximity to the selection. </p>
+<p>We only set ApplicationRegion so that we can set the location to write/read but if there are <strong>no preference it will be based on proximity.</strong></p>
+<h2 id="debugging-latency-and-region">Debugging Latency and Region</h2>
+<ol>
+<li>You can check with metric using Replication Latency to know the replication delay time between 2 regions, e.g. delay takes bout 2ms to replicate between Central Asia to East US.</li>
+<li>You can see the active region used in code with "Diagnostics"</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="n">ItemResponse</span><span class="o">&lt;</span><span class="kt">dynamic</span><span class="o">&gt;</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">container</span><span class="p">.</span><span class="n">ReadItemAsync</span><span class="o">&lt;</span><span class="kt">dynamic</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="w">     </span><span class="s">&quot;7d9273d9-5d91-404c-bb2d-126abb6e4833&quot;</span><span class="p">,</span>
+<span class="w">     </span><span class="k">new</span><span class="w"> </span><span class="nf">PartitionKey</span><span class="p">(</span><span class="s">&quot;78d204a2-7d64-4f4a-ac29-9bfc437ae959&quot;</span><span class="p">)</span>
+<span class="w"> </span><span class="p">);</span>
+
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;{response.Diagnostics}&quot;</span><span class="p">);</span>
+</code></pre></div>
+<h2 id="global-vs-local-region-replication">Global vs Local Region replication</h2>
+<p>Just take note that local distribution do replicate (Zone redundant/LRS) as well. Zone redundant need to be specified with <code>isZoneRedundant=true</code></p>
+<p><img alt="Local Replication" src="../img/replication_local.png" /></p>
+<h2 id="dynamic-quorum">Dynamic Quorum</h2>
+<p>For a 5 region account, the majority is three, so up to 2 unresponsive regions can be removed. 
+This capability is known as "dynamic quorum" and can improve both write availability and replication latency for accounts with three or more regions.</p>
+<ul>
+<li>When regions are removed from the quorum set as part of dynamic quorum, those regions are no longer able to serve reads until readded into the quorum.</li>
+</ul>
+<h2 id="readwrite-of-consistency-level">Read/Write of Consistency level</h2>
+<p>Write consistency is always based on account consistency level. It is regardless is multi region or single region write.</p>
+<p><strong>Example</strong>:
+In cosmosDB if i have multiregion read consistency; given that i have a strong consistency at the db level and only a single write region, what happens to the write consistency if my application SDK is using eventual consistency?</p>
+<p>Database-Level Strong Consistency (Strong): When your Cosmos DB account is configured for Strong consistency with a single write region, it means that every write must be synchronously replicated and committed to all configured regions before the write is acknowledged as complete to the client. This is the strongest possible guarantee for your data writes and durability.</p>
+<p>Global Commitment: Because the account's default consistency is Strong, the write operation will synchronously replicate to all secondary read regions and be committed there before the write request returns success to your application.</p>
+<p>Read Consistency: If your SDK client issues a read request with the Eventual consistency setting (which is weaker than the account's default Strong), that read will be executed against a single replica in the region being targeted, bypassing the requirement to consult other replicas.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
