@@ -6,7 +6,7 @@ Practice via the following lab links from [Microsoft Learning](https://github.co
   2. Always use free tier and make sure you have only 1 Cosmos DB account, not 2. Keep checking DB Account.
   3. Set a billing budget in Azure Portal via Cost Management -> Budgets. You can set alert of 0.1 USD if you're paranoid.
   4. To view your charges to Cost Management -> Cost analysis to see what is charged after labs.
-  5. Becareful of 16 and 17 Denormalize. It creates a database that opts out free tier and creates a charge of at least USD20 a day. Each execution creates a new DB account with random name.
+  5. Becareful of 16 (Measure) and 17 (Denormalize). It creates a database that opts out free tier and creates a charge of at least USD20 a day. Each execution creates a new DB account with random name.
 
 
 ## Lab settings to know
