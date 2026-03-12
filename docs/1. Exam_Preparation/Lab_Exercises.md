@@ -19,37 +19,58 @@ az cosmosdb sql role assignment create --resource-group "<RESOURCE_GROUP_NAME>" 
 2. Create the database named `cosmicworks` manually.
 You must create the database manually "cosmicworks", there are no options for you to skip this only via Az CLI/ARM/Bicep/Terraform. There is no permission available to create DB.
 
-3. (Doesn't work) Tried but did not work, even with scope above I couldn't create a container. Use CLI/master key/ARM/Bicep/Terraform instead to create/update a container. Below will not work even assigned.
+3. The SDK is only for dataplane control (meaning only for data plane not control plane). It is only possible via CLI/ARM/Bicep/Terraform to create db or container. To change via code you need ARM library
 ```
-az cosmosdb sql role definition create \
-    --account-name "<COSMOS_DB_ACCOUNT_NAME>" \
-    --resource-group "<RESOURCE_GROUP_NAME>" \
-    --body '{
-        "RoleName": "DatabaseCreator",
-        "Type": "CustomRole",
-        "AssignableScopes": ["/"],
-        "Permissions": [{
-            "DataActions": [
-                "Microsoft.DocumentDB/databaseAccounts/readMetadata",
-                "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/*",
-                "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/*"
-            ]
-        }]
-    }
-# You can also find the id in the output, kind of long with /subscriptions<SUBSCRIPTION>/resourceGroups/<RESOURCE_GROUP_NAME>/providers/Microsoft.DocumentDB/databaseAccounts/<COSMOS_DB_ACCOUNT_NAME>/sqlRoleDefinitions/xx-xxxx-xx-xx-xxxxxx
-``` 
+using System;
+using System.Threading.Tasks;
+using Azure.Core;
+using Azure.Identity;
+using Azure.ResourceManager;
+using Azure.ResourceManager.CosmosDB;
+using Azure.ResourceManager.CosmosDB.Models;
 
-```
-az cosmosdb sql role assignment create --resource-group "<RESOURCE_GROUP_NAME>" --account-name "<COSMOS_DB_ACCOUNT_NAME>" --role-definition-id "$( \
-az cosmosdb sql role definition list \
-    --account-name "<COSMOS_DB_ACCOUNT_NAME>" \
-    --resource-group "<RESOURCE_GROUP_NAME>" \
-    --query "[?roleName=='DatabaseCreator'].id" \
-    --output tsv \
-)" --principal-id $(az ad signed-in-user show --query id -o tsv) --scope "/"
+// 1. Authenticate using Entra ID (RBAC)
+var credential = new DefaultAzureCredential();
+var armClient = new ArmClient(credential);
+
+string resourceGroupName = "dp-420";
+string accountName = "costly-db";
+
+// 2. Get a reference to your Cosmos DB Account via the Control Plane
+var subscription = await armClient.GetDefaultSubscriptionAsync();
+var resourceGroup = await subscription.GetResourceGroupAsync(resourceGroupName);
+var cosmosAccount = await resourceGroup.Value.GetCosmosDBAccountAsync(accountName);
+
+// 3. Create the Database using the Management SDK
+string databaseName = "cosmicworks";
+var databaseData = new CosmosDBSqlDatabaseCreateOrUpdateContent(
+    new AzureLocation("eastus"), 
+    new ExtendedCosmosDBSqlDatabaseResourceInfo(databaseName));
+
+var databaseResource = await cosmosAccount.Value.GetCosmosDBSqlDatabases().CreateOrUpdateAsync(Azure.WaitUntil.Completed, databaseName, databaseData);
+Console.WriteLine($"Database {databaseName} created/verified.");
+
+// 4. Create the Container using the Management SDK
+string containerName = "products";
+var containerData = new CosmosDBSqlContainerCreateOrUpdateContent(
+    new AzureLocation("eastus"), 
+    new ExtendedCosmosDBSqlContainerResourceInfo(containerName)
+    {
+        PartitionKey = new CosmosDBContainerPartitionKey()
+        {
+            Paths = { "/categoryId" },
+            Kind = CosmosDBPartitionKind.Hash
+        }
+    })
+{
+    Options = new CosmosDBCreateUpdateConfig { Throughput = 400 }
+};
+
+var containerResource = await databaseResource.Value.GetCosmosDBSqlContainers().CreateOrUpdateAsync(Azure.WaitUntil.Completed, containerName, containerData);
+Console.WriteLine($"Container {containerName} created/verified.");
 ```
 
-4. Enable auth, default is true but this allows the use of master key.
+4. Enable auth, default is false, incase it fails it means a master key is not allowed.
 ```
 az resource update --resource-type "Microsoft.DocumentDB/databaseAccounts" --resource-group dp-420 --name cosmicworks --set properties.disableLocalAuth=false 
 ```
