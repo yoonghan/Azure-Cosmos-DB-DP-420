@@ -16,10 +16,10 @@ Practice via the following lab links from [Microsoft Learning](https://github.co
 az cosmosdb sql role assignment create --resource-group "<RESOURCE_GROUP_NAME>" --account-name "<COSMOS_DB_ACCOUNT_NAME>" --role-definition-id "00000000-0000-0000-0000-000000000002" --principal-id $(az ad signed-in-user show --query id -o tsv) --scope "/"
 ```
 
-2. Create the database named `cosmicworks` manually.
+2. Create the database named `cosmicworks` manually if master/primary/secondary key are not used.
 You must create the database manually "cosmicworks", there are no options for you to skip this only via Az CLI/ARM/Bicep/Terraform. There is no permission available to create DB.
 
-3. The SDK is only for dataplane control (meaning only for data plane not control plane). It is only possible via CLI/ARM/Bicep/Terraform to create db or container. To change via code you need ARM library
+3. The SDK is only for dataplane control (meaning only for data plane not control plane) for RBAC, using master key is fine. It is only possible via CLI/ARM/Bicep/Terraform to create db or container. To change via code you need ARM library
 ```
 using System;
 using System.Threading.Tasks;
