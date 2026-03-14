@@ -9,6 +9,7 @@ The notes are open for community contribution and meant to cover key concepts in
 *   **Content**: Written entirely in Markdown (`.md`) files inside the `docs/` directory.
 *   **Static Site Generator**: [MkDocs Material](https://squidfunk.github.io/mkdocs-material/).
 *   **Hosting**: GitHub Pages.
+*   **Important Note**: This is **NOT** a Node.js or npm project. There is no `package.json`, and no `npm install` or `npm run` commands are used.
 
 ## Building and Running
 
