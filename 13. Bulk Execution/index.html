@@ -1,0 +1,1916 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Han">
+      
+      
+        <link rel="canonical" href="https://yoonghan.github.io/Azure-Cosmos-DB-DP-420/13.%20Bulk%20Execution/">
+      
+      
+        <link rel="prev" href="../12.%20Batch%20Transaction/">
+      
+      
+        <link rel="next" href="../14.%20Queries/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>Bulk Execution - Azure Cosmos DB (DP-420) Study Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#bulk-execution" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-header__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Azure Cosmos DB (DP-420) Study Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Bulk Execution
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../2.%20Overview/" class="md-tabs__link">
+          
+  
+  
+  Topics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../1.%20Exam_Preparation/Notes/" class="md-tabs__link">
+          
+  
+  
+  Exam
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-nav__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Azure Cosmos DB (DP-420) Study Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.%20Overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%20Replication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20Conflict_Handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.%20Analytics_Connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Azure Analytics Connectivity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.%20CosmosDB_Emulator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emulator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.%20CosmosDB_Roles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.%20InnerWorks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Innerworks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.%20Integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.%20Designing%20Database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Designing Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.%20SDK%20Errors%20Codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDK Error Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12.%20Batch%20Transaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Batch Transaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bulk Execution
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bulk Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#drawbacks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drawbacks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best practices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transactional-batch-vs-bulk-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transactional Batch vs Bulk Execution
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14.%20Queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Queries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15.%20Indexing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Indexing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16.%20Time%20To%20Live/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time To Live (TTL)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17.%20Partition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Partition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18.%20Request%20Unit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Request Unit (RU)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19.%20Gateway%20Mode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gateway Mode
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20.%20Rest%20API/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rest API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21.%20Security%20and%20Encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security And Encryption
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../22.%20Backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../23.%20Consistency/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consistency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../24.%20Change%20Feed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Change Feed
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../25.%20CLI%20Command/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../26.%20DeveloperTools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../27.%20Stored%20Procedure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stored Procedures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../28.%20UDF%20and%20Triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UDF and Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../29.%20Features%20And%20Implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature and Implementations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../30.%20Vector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../31.%20Cognitive%20Search/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cognitive Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../32.%20Troubleshooting%20And%20Monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monitoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../33.%20Authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../34.%20Migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Exam
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Lab_Exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hands-on Labs Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#drawbacks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drawbacks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best practices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transactional-batch-vs-bulk-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transactional Batch vs Bulk Execution
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="bulk-execution">Bulk Execution</h1>
+<p>Similar to Transactional Batch, except that:
+- PartitionKey is mandatory, but can be grouped or seperated, meaning you can have different partition key in the same request. (In MS learn it says optional but in actual implementation none of the SDK provides this as optional)
+- No atomicity. If one fail, it will continue.
+- Limit of 2MB is per request, not entire batch.
+- Need to enable <strong>AllowBulkExecution</strong> in CosmosClientOption for Java and C#
+- Combination of CreateItemAsync/UpdateItemAsync/DeleteItemAsync Then using <strong>WhenAll</strong>(tasks)</p>
+<div class="highlight"><pre><span></span><code><span class="n">CosmosClientOptions</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+<span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">AllowBulkExecution</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> </span>
+<span class="p">};</span>
+
+<span class="n">List</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span><span class="w"> </span><span class="n">productsToInsert</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetOurProductsFromSomeWhere</span><span class="p">();</span>
+
+<span class="n">List</span><span class="o">&lt;</span><span class="n">Task</span><span class="o">&gt;</span><span class="w"> </span><span class="n">concurrentTasks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Task</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="k">foreach</span><span class="p">(</span><span class="n">Product</span><span class="w"> </span><span class="n">product</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">productsToInsert</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="c1">//Look carefully, this is just normal create statement.</span>
+<span class="w">    </span><span class="n">concurrentTasks</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span>
+<span class="w">        </span><span class="n">container</span><span class="p">.</span><span class="n">CreateItemAsync</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="w">            </span><span class="n">product</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="nf">PartitionKey</span><span class="p">(</span><span class="n">product</span><span class="p">.</span><span class="n">partitionKeyValue</span><span class="p">))</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">Task</span><span class="p">.</span><span class="n">WhenAll</span><span class="p">(</span><span class="n">concurrentTasks</span><span class="p">);</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">saddle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;0120&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Worn Saddler&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">categoryId</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;9603ca6c-9e28-4a02-9194-51cdb7fea816&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">handlebar</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;012A&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Rusty Handlebarr&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">categoryId</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;9603ca6c-9e28-4a02-9194-51cdb7fea816&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">helmet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;012C&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;New Helmet&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">categoryId</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;2202234-9e28-4a02-9194-51cdb7fea816&quot;</span><span class="w"> </span><span class="p">};</span>
+
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">partitionKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">saddle</span><span class="p">.</span><span class="nx">categoryId</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Create items</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">batchOperations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">operationType</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Create&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">resourceBody</span><span class="o">:</span><span class="w"> </span><span class="nx">saddle</span><span class="p">,</span><span class="w"> </span><span class="nx">partitionKey</span><span class="o">:</span><span class="w"> </span><span class="nx">saddle</span><span class="p">.</span><span class="nx">categoryId</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">operationType</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Create&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">resourceBody</span><span class="o">:</span><span class="w"> </span><span class="nx">helmet</span><span class="p">,</span><span class="w"> </span><span class="nx">partitionKey</span><span class="o">:</span><span class="w"> </span><span class="nx">helmet</span><span class="p">.</span><span class="nx">categoryId</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">operationType</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Create&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">resourceBody</span><span class="o">:</span><span class="w"> </span><span class="nx">handlebar</span><span class="p">,</span><span class="w"> </span><span class="nx">partitionKey</span><span class="o">:</span><span class="w"> </span><span class="nx">handlebar</span><span class="p">.</span><span class="nx">categoryId</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">];</span>
+
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">bulkResponse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">container</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">executeBulkOperations</span><span class="p">(</span><span class="nx">batchOperations</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">op</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">({</span>
+<span class="w">        </span><span class="p">...</span><span class="nx">op</span><span class="p">,</span>
+<span class="c1">// partitionKey // IMPORTANT: This is optional, if item contains partition key then don&#39;t need this but if it&#39;s here ALL the items will use this partition key. Either in item/executeBulkOperation must have partition key.</span>
+<span class="w">    </span><span class="p">})));</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Bulk create response:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">bulkResponse</span><span class="p">);</span>
+</code></pre></div>
+<h2 id="drawbacks">Drawbacks</h2>
+<table>
+<thead>
+<tr>
+<th>Drawbacks</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Latency</td>
+<td>The SDK batches operations internally and waits to dispatch them until the batch is full or a timeout (typically 100ms) is reached.</td>
+</tr>
+<tr>
+<td>Only small size</td>
+<td>Either 2MB or 10records and maximum 5 seconds</td>
+</tr>
+<tr>
+<td>Higher throughput</td>
+<td>Higher RU/s compared to running query statement 1 by 1</td>
+</tr>
+</tbody>
+</table>
+<h2 id="best-practices">Best practices</h2>
+<p>https://learn.microsoft.com/en-sg/training/modules/process-bulk-data-azure-cosmos-db-sql-api/4-implement-bulk-best-practices</p>
+<ol>
+<li>Not always required to add partition key in class. BUT this statement is misleading as it means if your class contains partition key, then you do not need to add it; the code can find the partition key from the class. But it's slower as it iterate through the object. Also I couldn't find any SDK that support this.</li>
+<li>Use worker task (for API) to configure parallelism based on partition key. Worker is a thread.</li>
+<li>Use stream when possible, meaning not to deserialize the entire batch into memory.</li>
+</ol>
+<h2 id="results">Results</h2>
+<p>Error results will be returned in the response.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">operations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">operationType</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Create&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">resourceBody</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;item1&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Product A&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">categoryId</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Electronics&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nx">partitionKey</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Electronics&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">operationType</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Create&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">resourceBody</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;item2&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Product B&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">categoryId</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Clothing&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nx">partitionKey</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Clothing&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">},</span>
+
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">operationType</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Create&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">resourceBody</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;item3&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Product C&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">categoryId</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Books&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nx">partitionKey</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Books&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">operationType</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Upsert&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">resourceBody</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;item1&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Product B&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">price</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nx">partitionKey</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Clothing&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">operationType</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Upsert&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">resourceBody</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;item2&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Product B&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">price</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span><span class="w"> </span><span class="nx">categoryId</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Clothing&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nx">partitionKey</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Clothing&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">operationType</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Upsert&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">resourceBody</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;item2&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Product B&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">price</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span><span class="w"> </span><span class="nx">categoryId</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Clothing&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">operationType</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Delete&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;item3&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">partitionKey</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Books&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">  </span><span class="p">];</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="err">Bulk</span><span class="w"> </span><span class="err">opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">ns</span><span class="w"> </span><span class="err">comple</span><span class="kc">te</span><span class="err">d</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="err">opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">I</span><span class="kc">n</span><span class="err">pu</span><span class="kc">t</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="err">opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">Type</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Crea</span><span class="kc">te</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">resourceBody</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="p">],</span>
+<span class="w">      </span><span class="err">par</span><span class="kc">t</span><span class="err">i</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">Key</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Elec</span><span class="kc">tr</span><span class="err">o</span><span class="kc">n</span><span class="err">ics&#39;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="err">error</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="err">message</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">code</span><span class="p">:</span><span class="w"> </span><span class="mi">409</span><span class="p">,</span>
+<span class="w">      </span><span class="err">subs</span><span class="kc">tatus</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">body</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">headers</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="p">],</span>
+<span class="w">      </span><span class="err">ac</span><span class="kc">t</span><span class="err">ivi</span><span class="kc">t</span><span class="err">yId</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;b</span><span class="mi">4</span><span class="err">c</span><span class="mi">8</span><span class="kc">fa</span><span class="mi">6</span><span class="err">b</span><span class="mi">-4113-458</span><span class="kc">f</span><span class="mi">-9274-</span><span class="err">c</span><span class="mi">9</span><span class="err">b</span><span class="mi">16</span><span class="err">b</span><span class="mi">083905</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">re</span><span class="kc">tr</span><span class="err">yA</span><span class="kc">fter</span><span class="err">I</span><span class="kc">n</span><span class="err">Ms</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">re</span><span class="kc">tr</span><span class="err">yA</span><span class="kc">fter</span><span class="err">I</span><span class="kc">n</span><span class="err">Milliseco</span><span class="kc">n</span><span class="err">ds</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">diag</span><span class="kc">n</span><span class="err">os</span><span class="kc">t</span><span class="err">ics</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">CosmosDiag</span><span class="kc">n</span><span class="err">os</span><span class="kc">t</span><span class="err">ics</span><span class="p">],</span>
+<span class="w">      </span><span class="err">reques</span><span class="kc">t</span><span class="err">Charge</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5714285714285714</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="err">opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">I</span><span class="kc">n</span><span class="err">pu</span><span class="kc">t</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="err">opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">Type</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Crea</span><span class="kc">te</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">resourceBody</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="p">],</span>
+<span class="w">      </span><span class="err">par</span><span class="kc">t</span><span class="err">i</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">Key</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Clo</span><span class="kc">t</span><span class="err">hi</span><span class="kc">n</span><span class="err">g&#39;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="err">error</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="err">message</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">code</span><span class="p">:</span><span class="w"> </span><span class="mi">409</span><span class="p">,</span>
+<span class="w">      </span><span class="err">subs</span><span class="kc">tatus</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">body</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">headers</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="p">],</span>
+<span class="w">      </span><span class="err">ac</span><span class="kc">t</span><span class="err">ivi</span><span class="kc">t</span><span class="err">yId</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;b</span><span class="mi">4</span><span class="err">c</span><span class="mi">8</span><span class="kc">fa</span><span class="mi">6</span><span class="err">b</span><span class="mi">-4113-458</span><span class="kc">f</span><span class="mi">-9274-</span><span class="err">c</span><span class="mi">9</span><span class="err">b</span><span class="mi">16</span><span class="err">b</span><span class="mi">083905</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">re</span><span class="kc">tr</span><span class="err">yA</span><span class="kc">fter</span><span class="err">I</span><span class="kc">n</span><span class="err">Ms</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">re</span><span class="kc">tr</span><span class="err">yA</span><span class="kc">fter</span><span class="err">I</span><span class="kc">n</span><span class="err">Milliseco</span><span class="kc">n</span><span class="err">ds</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">diag</span><span class="kc">n</span><span class="err">os</span><span class="kc">t</span><span class="err">ics</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">CosmosDiag</span><span class="kc">n</span><span class="err">os</span><span class="kc">t</span><span class="err">ics</span><span class="p">],</span>
+<span class="w">      </span><span class="err">reques</span><span class="kc">t</span><span class="err">Charge</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5714285714285714</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="err">opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">I</span><span class="kc">n</span><span class="err">pu</span><span class="kc">t</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="err">opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">Type</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Crea</span><span class="kc">te</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">resourceBody</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="p">],</span>
+<span class="w">      </span><span class="err">par</span><span class="kc">t</span><span class="err">i</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">Key</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Books&#39;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="err">respo</span><span class="kc">nse</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="err">s</span><span class="kc">tatus</span><span class="err">Code</span><span class="p">:</span><span class="w"> </span><span class="mi">201</span><span class="p">,</span>
+<span class="w">      </span><span class="err">eTag</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;</span><span class="s2">&quot;00000bb2-0000-5900-0000-68d879a30000&quot;</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">ac</span><span class="kc">t</span><span class="err">ivi</span><span class="kc">t</span><span class="err">yId</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;b</span><span class="mi">4</span><span class="err">c</span><span class="mi">8</span><span class="kc">fa</span><span class="mi">6</span><span class="err">b</span><span class="mi">-4113-458</span><span class="kc">f</span><span class="mi">-9274-</span><span class="err">c</span><span class="mi">9</span><span class="err">b</span><span class="mi">16</span><span class="err">b</span><span class="mi">083905</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">sessio</span><span class="kc">n</span><span class="err">Toke</span><span class="kc">n</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;</span><span class="mi">0</span><span class="p">:</span><span class="mi">-1</span><span class="err">#</span><span class="mi">8</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">reques</span><span class="kc">t</span><span class="err">Charge</span><span class="p">:</span><span class="w"> </span><span class="mf">6.285714285714286</span><span class="p">,</span>
+<span class="w">      </span><span class="err">resourceBody</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="p">],</span>
+<span class="w">      </span><span class="err">diag</span><span class="kc">n</span><span class="err">os</span><span class="kc">t</span><span class="err">ics</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">CosmosDiag</span><span class="kc">n</span><span class="err">os</span><span class="kc">t</span><span class="err">ics</span><span class="p">],</span>
+<span class="w">      </span><span class="err">headers</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="err">opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">I</span><span class="kc">n</span><span class="err">pu</span><span class="kc">t</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="err">opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">Type</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Upser</span><span class="kc">t</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">resourceBody</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="p">],</span>
+<span class="w">      </span><span class="err">par</span><span class="kc">t</span><span class="err">i</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">Key</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Clo</span><span class="kc">t</span><span class="err">hi</span><span class="kc">n</span><span class="err">g&#39;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="err">error</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="err">message</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">code</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span>
+<span class="w">      </span><span class="err">subs</span><span class="kc">tatus</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">body</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">headers</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="p">],</span>
+<span class="w">      </span><span class="err">ac</span><span class="kc">t</span><span class="err">ivi</span><span class="kc">t</span><span class="err">yId</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;b</span><span class="mi">4</span><span class="err">c</span><span class="mi">8</span><span class="kc">fa</span><span class="mi">6</span><span class="err">b</span><span class="mi">-4113-458</span><span class="kc">f</span><span class="mi">-9274-</span><span class="err">c</span><span class="mi">9</span><span class="err">b</span><span class="mi">16</span><span class="err">b</span><span class="mi">083905</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">re</span><span class="kc">tr</span><span class="err">yA</span><span class="kc">fter</span><span class="err">I</span><span class="kc">n</span><span class="err">Ms</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">re</span><span class="kc">tr</span><span class="err">yA</span><span class="kc">fter</span><span class="err">I</span><span class="kc">n</span><span class="err">Milliseco</span><span class="kc">n</span><span class="err">ds</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">diag</span><span class="kc">n</span><span class="err">os</span><span class="kc">t</span><span class="err">ics</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">CosmosDiag</span><span class="kc">n</span><span class="err">os</span><span class="kc">t</span><span class="err">ics</span><span class="p">],</span>
+<span class="w">      </span><span class="err">reques</span><span class="kc">t</span><span class="err">Charge</span><span class="p">:</span><span class="w"> </span><span class="mf">1.2380952380952381</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="err">opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">I</span><span class="kc">n</span><span class="err">pu</span><span class="kc">t</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="err">opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">Type</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Upser</span><span class="kc">t</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">resourceBody</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="p">],</span>
+<span class="w">      </span><span class="err">par</span><span class="kc">t</span><span class="err">i</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">Key</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Clo</span><span class="kc">t</span><span class="err">hi</span><span class="kc">n</span><span class="err">g&#39;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="err">respo</span><span class="kc">nse</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="err">s</span><span class="kc">tatus</span><span class="err">Code</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
+<span class="w">      </span><span class="err">eTag</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;</span><span class="s2">&quot;00000db2-0000-5900-0000-68d879a30000&quot;</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">ac</span><span class="kc">t</span><span class="err">ivi</span><span class="kc">t</span><span class="err">yId</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;b</span><span class="mi">4</span><span class="err">c</span><span class="mi">8</span><span class="kc">fa</span><span class="mi">6</span><span class="err">b</span><span class="mi">-4113-458</span><span class="kc">f</span><span class="mi">-9274-</span><span class="err">c</span><span class="mi">9</span><span class="err">b</span><span class="mi">16</span><span class="err">b</span><span class="mi">083905</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">sessio</span><span class="kc">n</span><span class="err">Toke</span><span class="kc">n</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;</span><span class="mi">0</span><span class="p">:</span><span class="mi">-1</span><span class="err">#</span><span class="mi">8</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">reques</span><span class="kc">t</span><span class="err">Charge</span><span class="p">:</span><span class="w"> </span><span class="mf">10.285714285714286</span><span class="p">,</span>
+<span class="w">      </span><span class="err">resourceBody</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="p">],</span>
+<span class="w">      </span><span class="err">diag</span><span class="kc">n</span><span class="err">os</span><span class="kc">t</span><span class="err">ics</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">CosmosDiag</span><span class="kc">n</span><span class="err">os</span><span class="kc">t</span><span class="err">ics</span><span class="p">],</span>
+<span class="w">      </span><span class="err">headers</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="err">opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">I</span><span class="kc">n</span><span class="err">pu</span><span class="kc">t</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">Type</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Upser</span><span class="kc">t</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">resourceBody</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="err">error</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="err">message</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Par</span><span class="kc">t</span><span class="err">i</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">Key</span><span class="w"> </span><span class="err">is</span><span class="w"> </span><span class="err">required</span><span class="w"> </span><span class="kc">f</span><span class="err">or</span><span class="w"> </span><span class="err">Upser</span><span class="kc">t</span><span class="w"> </span><span class="err">opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">ns</span><span class="err">.&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">code</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span>
+<span class="w">      </span><span class="err">subs</span><span class="kc">tatus</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">body</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">headers</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">ac</span><span class="kc">t</span><span class="err">ivi</span><span class="kc">t</span><span class="err">yId</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">re</span><span class="kc">tr</span><span class="err">yA</span><span class="kc">fter</span><span class="err">I</span><span class="kc">n</span><span class="err">Ms</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">re</span><span class="kc">tr</span><span class="err">yA</span><span class="kc">fter</span><span class="err">I</span><span class="kc">n</span><span class="err">Milliseco</span><span class="kc">n</span><span class="err">ds</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">diag</span><span class="kc">n</span><span class="err">os</span><span class="kc">t</span><span class="err">ics</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">reques</span><span class="kc">t</span><span class="err">Charge</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="err">opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">I</span><span class="kc">n</span><span class="err">pu</span><span class="kc">t</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">Type</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Dele</span><span class="kc">te</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">id</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;i</span><span class="kc">te</span><span class="err">m</span><span class="mi">3</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="err">par</span><span class="kc">t</span><span class="err">i</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">Key</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;Books&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="err">respo</span><span class="kc">nse</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="err">s</span><span class="kc">tatus</span><span class="err">Code</span><span class="p">:</span><span class="w"> </span><span class="mi">204</span><span class="p">,</span>
+<span class="w">      </span><span class="err">eTag</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">ac</span><span class="kc">t</span><span class="err">ivi</span><span class="kc">t</span><span class="err">yId</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;b</span><span class="mi">4</span><span class="err">c</span><span class="mi">8</span><span class="kc">fa</span><span class="mi">6</span><span class="err">b</span><span class="mi">-4113-458</span><span class="kc">f</span><span class="mi">-9274-</span><span class="err">c</span><span class="mi">9</span><span class="err">b</span><span class="mi">16</span><span class="err">b</span><span class="mi">083905</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">sessio</span><span class="kc">n</span><span class="err">Toke</span><span class="kc">n</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;</span><span class="mi">0</span><span class="p">:</span><span class="mi">-1</span><span class="err">#</span><span class="mi">8</span><span class="err">&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="err">reques</span><span class="kc">t</span><span class="err">Charge</span><span class="p">:</span><span class="w"> </span><span class="mf">6.095238095238095</span><span class="p">,</span>
+<span class="w">      </span><span class="err">resourceBody</span><span class="p">:</span><span class="w"> </span><span class="err">u</span><span class="kc">n</span><span class="err">de</span><span class="kc">f</span><span class="err">i</span><span class="kc">ne</span><span class="err">d</span><span class="p">,</span>
+<span class="w">      </span><span class="err">diag</span><span class="kc">n</span><span class="err">os</span><span class="kc">t</span><span class="err">ics</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">CosmosDiag</span><span class="kc">n</span><span class="err">os</span><span class="kc">t</span><span class="err">ics</span><span class="p">],</span>
+<span class="w">      </span><span class="err">headers</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">Objec</span><span class="kc">t</span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="transactional-batch-vs-bulk-execution">Transactional Batch vs Bulk Execution</h2>
+<p>In the Cosmos DB .NET SDK, there is a feature called Bulk Execution (AllowBulkExecution = true).</p>
+<p>If you throw 10,000 operations at the SDK in Bulk mode, the SDK automatically groups them under the hood and splits them into compliant physical requests (handling the 2MB / 100 operation limits automatically for you).
+Stored procedures cannot do this automatically, so Bulk Execution truly "avoids" you having to worry about the 2MB limitation when uploading lots of data. (Note: Bulk execution is not a single ACID transaction, unlike Transactional Batch).
+Summary for your notes:
+I would recommend updating your notes to be more accurate:</p>
+<p>Transactional Batch: Replaces Stored Procedures for ACID transactions (making multiple changes succeed/fail together on the same partition key) without needing to write server-side JavaScript. It still has a 100 item / 2MB payload limit.
+Bulk Execution: Groups multiple independent operations automatically to maximize throughput. This handles the chunking for you, avoiding the need to worry about the 2MB physical request limit per batch.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

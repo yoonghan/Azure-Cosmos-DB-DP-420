@@ -1,0 +1,2365 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Han">
+      
+      
+        <link rel="canonical" href="https://yoonghan.github.io/Azure-Cosmos-DB-DP-420/17.%20Partition/">
+      
+      
+        <link rel="prev" href="../16.%20Time%20To%20Live/">
+      
+      
+        <link rel="next" href="../18.%20Request%20Unit/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>Partition - Azure Cosmos DB (DP-420) Study Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#partition" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-header__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Azure Cosmos DB (DP-420) Study Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Partition
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../2.%20Overview/" class="md-tabs__link">
+          
+  
+  
+  Topics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../1.%20Exam_Preparation/Notes/" class="md-tabs__link">
+          
+  
+  
+  Exam
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-nav__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Azure Cosmos DB (DP-420) Study Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.%20Overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%20Replication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20Conflict_Handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.%20Analytics_Connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Azure Analytics Connectivity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.%20CosmosDB_Emulator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emulator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.%20CosmosDB_Roles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.%20InnerWorks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Innerworks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.%20Integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.%20Designing%20Database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Designing Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.%20SDK%20Errors%20Codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDK Error Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12.%20Batch%20Transaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Batch Transaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13.%20Bulk%20Execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bulk Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14.%20Queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Queries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15.%20Indexing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Indexing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16.%20Time%20To%20Live/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time To Live (TTL)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Partition
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Partition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#logical-partitions-in-azure-cosmos-db" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logical partitions in Azure Cosmos DB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#denormalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Denormalization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transaction-stored-procedures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transaction / Stored Procedures
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strategies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hierarchy-partitioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hierarchy partitioning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hierarchy partitioning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#max-hierarchy-partitioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Max hierarchy partitioning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Max hierarchy partitioning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#level-1-isolation-and-administration-eg-tenantid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 1: Isolation and Administration (e.g., /TenantId)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#level-2-distribution-and-hot-partition-mitigation-eg-userid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 2: Distribution and Hot Partition Mitigation (e.g., /UserId)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#level-3-storage-limit-evasion-eg-sessionid-or-itemid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 3: Storage Limit Evasion (e.g., /SessionId or /itemId)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partition-splitting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition splitting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Partition splitting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unique-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unique Keys
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partitioning-logicalphysical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partitioning logical/physical
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Partitioning logical/physical">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-partition-and-hot-partition-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How partition and hot partition works
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null-partition-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Null partition key
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#throughput-redistribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Throughput Redistribution
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#merging-partition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Merging Partition
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logical-vs-physical-partitioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logical vs Physical Partitioning
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hacking-physical-partition-to-perform-faster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hacking physical partition to perform faster.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#no-array-in-partition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No array in partition
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18.%20Request%20Unit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Request Unit (RU)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19.%20Gateway%20Mode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gateway Mode
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20.%20Rest%20API/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rest API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21.%20Security%20and%20Encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security And Encryption
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../22.%20Backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../23.%20Consistency/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consistency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../24.%20Change%20Feed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Change Feed
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../25.%20CLI%20Command/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../26.%20DeveloperTools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../27.%20Stored%20Procedure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stored Procedures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../28.%20UDF%20and%20Triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UDF and Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../29.%20Features%20And%20Implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature and Implementations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../30.%20Vector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../31.%20Cognitive%20Search/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cognitive Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../32.%20Troubleshooting%20And%20Monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monitoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../33.%20Authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../34.%20Migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Exam
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Lab_Exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hands-on Labs Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#logical-partitions-in-azure-cosmos-db" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logical partitions in Azure Cosmos DB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#denormalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Denormalization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transaction-stored-procedures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transaction / Stored Procedures
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strategies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hierarchy-partitioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hierarchy partitioning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hierarchy partitioning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#max-hierarchy-partitioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Max hierarchy partitioning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Max hierarchy partitioning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#level-1-isolation-and-administration-eg-tenantid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 1: Isolation and Administration (e.g., /TenantId)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#level-2-distribution-and-hot-partition-mitigation-eg-userid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 2: Distribution and Hot Partition Mitigation (e.g., /UserId)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#level-3-storage-limit-evasion-eg-sessionid-or-itemid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 3: Storage Limit Evasion (e.g., /SessionId or /itemId)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partition-splitting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition splitting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Partition splitting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unique-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unique Keys
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partitioning-logicalphysical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partitioning logical/physical
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Partitioning logical/physical">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-partition-and-hot-partition-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How partition and hot partition works
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null-partition-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Null partition key
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#throughput-redistribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Throughput Redistribution
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#merging-partition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Merging Partition
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logical-vs-physical-partitioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logical vs Physical Partitioning
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hacking-physical-partition-to-perform-faster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hacking physical partition to perform faster.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#no-array-in-partition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No array in partition
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="partition">Partition</h1>
+<ol>
+<li>The maximum storage size of a physical partition is 50 GB, and the maximum throughput is 10,000 RU/s. </li>
+<li>A logical partition max at 20GB.</li>
+<li>A partition key is immutable (regardless if hierarchical or not)</li>
+<li>Physical partition is split in 2 ways.<ul>
+<li>reach 50GB</li>
+<li>if assign per 10k RU/s. E.g. assign 20k it will split 2 physical partition automatically.</li>
+</ul>
+</li>
+<li>Partition Key cannot be changed once created. To do it you need to migrate to a new container.</li>
+</ol>
+<h2 id="logical-partitions-in-azure-cosmos-db">Logical partitions in Azure Cosmos DB</h2>
+<p>A logical partition is an abstraction above the underlying physical partitions. Multiple logical partitions can be stored within a single physical partition. A container can have an unlimited number of logical partitions. Individual logical partitions are moved to new physical partitions as they grow in size to ensure optimum storage utilization and growth. Moving logical partitions as a unit ensures that all documents within it reside on the same physical partition. The maximum size for a logical partition is 20 GB. Using a partition key with high cardinality allows you to avoid this 20-GB limit by spreading your data across a larger number of logical partitions. You can also use hierarchical partition keys which organize partition key values in a hierarchy to avoid this limit. These are covered in another learning path.</p>
+<p><img alt="Partition" src="../img/partitioning_log_phy.png" /></p>
+<p>*NOTE: If i do customer id as partition key; it does not mean it will create 1million logical partition. Logical partitions are a virtual concept, and there's no limit to how many logical partitions you can have. Azure Cosmos DB will collocate multiple logical partitions on the same physical partition. As logical partitions grow in number or in size, Cosmos DB will move them to new physical partitions when needed.</p>
+<h2 id="denormalization">Denormalization</h2>
+<p>When data share a partition key and have similar access patterns, they're candidates for being stored in the same container.  Example if we have customer and sales order, it's best to store in 1 container rather than seperate.</p>
+<h2 id="transaction-stored-procedures">Transaction / Stored Procedures</h2>
+<p>https://learn.microsoft.com/en-us/training/modules/design-data-partitioning-strategy/5-denormalize-aggregates-same-container</p>
+<p>Azure Cosmos DB supports transactions and stored procedures when the data sits within the <strong>same logical partition</strong>.</p>
+<p>There are two ways to implement transactions in Azure Cosmos DB: by using stored procedures or transactional batch, which is available in both .NET and Java SDKs. REMEMBER: Transactional batch to add a condition to check if it's already updated (e.g. WHERE metricsdeviceid = 1, so can update to 2).</p>
+<p><img alt="Partitioning Batch" src="../img/partitioning_batch.png" /></p>
+<h2 id="strategies">Strategies</h2>
+<table>
+<thead>
+<tr>
+<th>Partitioning strategy</th>
+<th>When to use</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Regular Partition Key (for example, CustomerId, OrderId)</td>
+<td>Use when the partition key has high cardinality and aligns with query patterns (for example, filtering by CustomerId). Suitable for workloads where queries mostly target a single customer's data (for example, retrieving all orders for a customer).</td>
+<td>Simple to manage. Efficient queries when the access pattern matches the partition key (for example, querying all orders by CustomerId). Prevents cross-partition queries if access patterns are consistent.</td>
+<td>Risk of hot partitions if some values (for example, a few high-traffic customers) generate more data than others. Might hit the 20-GB limit per logical partition if data volume for a specific key grows rapidly.</td>
+</tr>
+<tr>
+<td>Synthetic Partition Key (for example, CustomerId + OrderDate)</td>
+<td>Use when no single field has both high cardinality and matches query patterns. Good for write-heavy workloads where data needs to be evenly distributed across physical partitions (for example, many orders placed on the same date).</td>
+<td>Helps distribute data evenly across partitions, reducing hot partitions (for example, distributing orders by both CustomerId and OrderDate). Spreads writes across multiple partitions and improves throughput.</td>
+<td>Queries that only filter by one field (for example, CustomerId only) could result in cross-partition queries. Cross-partition queries can lead to higher RU consumption (2-3 RU/s extra charge for every physical partition that exists) and added latency.</td>
+</tr>
+<tr>
+<td>Hierarchical Partition Key (HPK) (for example, CustomerId/OrderId, StoreId/ProductId)</td>
+<td>Use when you need multi-level partitioning to support large-scale datasets. Ideal when queries filter on first and second levels of the hierarchy.</td>
+<td>Helps avoid the 20-GB limit by creating multiple levels of partitioning. Efficient querying on both hierarchical levels (for example, filtering first by CustomerID, then by OrderID). Minimizes cross-partition queries for queries targeting the top level (for example, retrieving all data from a specific CustomerID).</td>
+<td>Requires careful planning to ensure the first-level key has high cardinality and is included in most queries. More complex to manage than a regular partition key. If queries don't align with the hierarchy (for example, filtering only by OrderID when CustomerID is the first level), query performance might suffer.</td>
+</tr>
+<tr>
+<td>Global Secondary Index (GSI) - preview (for example, source uses CustomerId, GSI uses OrderId)</td>
+<td>Use when you can't find a single partition key that works for all query patterns. Ideal for workloads that need to query by multiple independent properties efficiently and have a large number of physical partitions.</td>
+<td>Eliminates cross-partition queries when using the GSI partition key. Allows multiple query patterns on the same data with automatic synchronization from source container. Performance isolation between workloads.</td>
+<td>Each GSI has additional storage and RU costs. Data in the GSI is eventually consistent with source container.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="hierarchy-partitioning">Hierarchy partitioning</h2>
+<p>Cosmos DB introduced Hierarchical Partition Keys (also known as sub-partitioning) which allows you to define a composite partition key (e.g., /TenantId, /UserId). This feature allows you to exceed the 20 GB storage limit for a single tenant, and in practice, allows for higher throughput per-tenant by distributing a single "logical tenant" across multiple physical partitions. While this mechanism is designed to scale beyond the default limits, the hard limit for a single physical partition remains 10,000 RU/s.</p>
+<p>Main idea is doesn't need to create a "synthetic" data. Now just create a indicate the new key it then concat both to calculate hashkey.</p>
+<p>Support in:</p>
+<ul>
+<li>Portal</li>
+<li>Code</li>
+<li>ONLY NoSQL (others like mongodb etc are not supported)</li>
+</ul>
+<p><strong>NOTE</strong>: Only support up to 3 hierarchy level.
+Is an advance concept and it's not a simple "synthetic key" (combine 2 key). It actually split logical partition after a hierarchical partitioning.</p>
+<h3 id="example">Example</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>HPK: /country_id/user_id</th>
+<th>Single Key: /user_id</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hot Partition Fix</td>
+<td>Yes (Load is spread by user)</td>
+<td>Yes (Load is spread by user)</td>
+</tr>
+<tr>
+<td>Country-Specific Queries</td>
+<td>Efficient (Single-partition scan of one country's data).</td>
+<td>Inefficient (Cross-partition query scanning all countries).</td>
+</tr>
+<tr>
+<td>User-Specific Queries</td>
+<td>Highly Efficient (Single-partition lookup).</td>
+<td>Highly Efficient (Single-partition lookup).</td>
+</tr>
+<tr>
+<td>Tenant/Country Management</td>
+<td>Excellent. Data for a country is logically grouped for reporting or regional management.</td>
+<td>Poor. Country data is scattered across all physical partitions.</td>
+</tr>
+</tbody>
+</table>
+<p>** Write Performance (Solving the Hot Partition) - Excellent ✅
+Problem Solved: The original hot partition was caused by Country 1 receiving all 25,000 RU/s on a single logical partition.</p>
+<p>HPK Solution: By adding /user_id as the secondary key, the load for Country 1 is now distributed across thousands of logical partitions, one for each unique user within that country.</p>
+<p>Result: The 25,000 RU/s is now spread across many physical partitions, eliminating the hot spot and allowing the system to scale its write throughput.</p>
+<h2 id="max-hierarchy-partitioning">Max hierarchy partitioning</h2>
+<p>Here is a breakdown of the common purpose for each level:</p>
+<h3 id="level-1-isolation-and-administration-eg-tenantid"><strong>Level 1</strong>: Isolation and Administration (e.g., /TenantId)</h3>
+<p>Purpose: To group data for management, billing, and highly efficient queries scoped to the primary entity. This is your largest-grained separation.</p>
+<p>Benefit: Enables single-partition queries for all operations within that tenant or country.</p>
+<h3 id="level-2-distribution-and-hot-partition-mitigation-eg-userid"><strong>Level 2</strong>: Distribution and Hot Partition Mitigation (e.g., /UserId)</h3>
+<p>Purpose: To provide the high cardinality necessary to distribute the throughput (RU/s) load within the Level 1 group, preventing hot partitions.</p>
+<p>Benefit: Spreads the load of a large tenant across multiple logical partitions, allowing the single-tenant RU consumption to exceed the 10,000 RU/s limit of a single physical partition.</p>
+<h3 id="level-3-storage-limit-evasion-eg-sessionid-or-itemid"><strong>Level 3:</strong> Storage Limit Evasion (e.g., /SessionId or /itemId)</h3>
+<p>Purpose: To prevent a single logical partition from exceeding the 20 GB storage limit, even for a single user/tenant combination.</p>
+<p>Benefit: If you have a scenario where the combination of the first two keys (e.g., a single user's data in a single tenant) is expected to grow beyond 20 GB, adding a third key like a SessionId, OrderId, or even the item's id guarantees unlimited storage scale for that user's data by further breaking it into smaller, manageable logical partitions.</p>
+<h2 id="partition-splitting">Partition splitting</h2>
+<p>It means physical when the term "Partition split" and normally before reaching 50GB.</p>
+<table>
+<thead>
+<tr>
+<th>Partition Type</th>
+<th>Definition</th>
+<th>Trigger for Split/Scaling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Logical Partition</td>
+<td>A conceptual unit of data that holds all items that share the same partition key value. e.g., all customer data where customerId = '12345'.</td>
+<td>Does not split. Its maximum size is 20 GB and maximum throughput is 10,000 RU/s. If it exceeds these limits, it often indicates a poor partition key choice (a "hot" partition).</td>
+</tr>
+<tr>
+<td>Physical Partition</td>
+<td>The actual, internal hardware (storage and compute) managed by Cosmos DB that hosts one or more logical partitions. It's the unit of horizontal scale.</td>
+<td>Splits when its total data storage (sum of all logical partitions it contains) reaches its maximum limit of 50 GB (or when the provisioned throughput requires more physical partitions).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="how-it-works">How it works</h3>
+<p>If you have 1 physical partition (PP) and you have provisioned 30,000 RU/s, it splits to 3 physical partitions.</p>
+<p>The Law of 10k: A single physical partition can never exceed 10,000 RU/s.</p>
+<p>Automatic Splitting: If you assign 30,000 RU/s to a container, Cosmos DB will automatically create at least 3 physical partitions (30k / 10k = 3).</p>
+<p>Now, let's look at your specific example:
+Suppose your 10 logical partitions are distributed across these 3 physical partitions.</p>
+<p>Physical Partition A: 10,000 RU/s (Contains Logical Partitions 1, 2, 3)</p>
+<p>Physical Partition B: 10,000 RU/s (Contains Logical Partitions 4, 5, 6)</p>
+<p>Physical Partition C: 10,000 RU/s (Contains Logical Partitions 7, 8, 9, 10)</p>
+<p>If your queries cause a cost of 10,000 RU/s for just Logical Partition 1:</p>
+<p>Yes, this is a hot partition. * Because Logical Partition 1 is on Physical Partition A, it is now consuming 100% of that partition's available bandwidth.</p>
+<p>The Victim: If you try to query Logical Partition 2 or 3 (which are in the same "room" as the hot one), they will get 429 Throttling errors even though they aren't the ones being busy. This is called the "noisy neighbor" effect.</p>
+<h2 id="unique-keys">Unique Keys</h2>
+<ol>
+<li>Partition Key is NOT unique.</li>
+<li>Unique key are based on path.</li>
+<li>Logical partition has to be unique. NOTE: the reason duplicates can still exist for unique path.</li>
+<li>Unique key cannot be changed once container is created.</li>
+</ol>
+<p>Unique Constraint = Partition Key Value + Unique Key Value</p>
+<p>E.g.
+Document | /sku (Unique Key) | /categoryId (Partition Key) | Combination (Must be Unique) | Result of Upsert/Insert
+-- | -- | -- | -- | --
+Doc A | SKU101 | CAT_A | SKU101 + CAT_A | Allowed
+Doc B | SKU101 | CAT_B | SKU101 + CAT_B | Allowed (Different Partition Key)
+Doc C | SKU101 | CAT_A | SKU101 + CAT_A | Blocked (Duplicate Combination)
+Doc D | SKU102 | CAT_A | SKU102 + CAT_A | Allowed</p>
+<h2 id="partitioning-logicalphysical">Partitioning logical/physical</h2>
+<ol>
+<li>Cosmos DB uses Hash-Based Partitioning.</li>
+<li>To see range mapping to physical partitions, use <em>ReadPartitionKeyRangeFeedAsync</em></li>
+</ol>
+<h3 id="how-partition-and-hot-partition-works">How partition and hot partition works</h3>
+<p>Every customerId is passed through a hash function that turns it into a number.</p>
+<p>The total "hash space" is divided among your physical partitions.</p>
+<p>The "Coincidence" Problem: Even if you have 1 million customers, if a large group of them (e.g., Customer_A through Customer_AAA) happens to hash into the same range, they all land on Physical Partition A.</p>
+<p>If those specific customers all become active at the same time, they will collectively fight for the 10,000 RU/s limit of that physical server, even though they are technically different logical partitions.</p>
+<h2 id="null-partition-key">Null partition key</h2>
+<p>This is valid and apparently we can insert null on partition key, including hierarchical partition key.</p>
+<p>To query a null partition via partition key however requires special method:
+Hierarchy PK or just PK: pass []
+SDK: PartitionKey.Null or PartitionKey.None</p>
+<p>Indicate in ms-documentdb-partitionkey</p>
+<h2 id="throughput-redistribution">Throughput Redistribution</h2>
+<p>A new feature that allows Logical/Physical Partition to hit limit up-to 20k.</p>
+<div class="highlight"><pre><span></span><code>az<span class="w"> </span>cosmosdb<span class="w"> </span>sql<span class="w"> </span>container<span class="w"> </span>redistribute-partition-throughput<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--account-name<span class="w"> </span>&lt;account-name&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--resource-group<span class="w"> </span>&lt;resource-group&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--database-name<span class="w"> </span>&lt;database-name&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>&lt;container-name&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--target-partitions<span class="w"> </span><span class="s2">&quot;0=15000 1=5000&quot;</span>
+</code></pre></div>
+<h2 id="merging-partition">Merging Partition</h2>
+<p>See Features section. As this is an account feature.</p>
+<p>For some reason you have a long running container that has been assigned with large RU/s and was scaled up for a period later to have been clean-up and partition reduced, you can save 'cost' and 'performance' with merging. E.g. assigning 50,000RU/s the partition was split physically to 5, then data reduced with need of only 2,000RU/s and actually need only 1 partition; then use this.</p>
+<p>Microsoft generally recommends merging when your container meets these two conditions:
+1. Low Throughput: Your current RU/s per physical partition is &lt; 3,000 RU/s.
+2. Low Storage: Your current average storage per physical partition is &lt; 20 GB.</p>
+<p>Use command
+<div class="highlight"><pre><span></span><code>az<span class="w"> </span>cosmosdb<span class="w"> </span>sql<span class="w"> </span>container<span class="w"> </span>merge<span class="w"> </span>--
+</code></pre></div></p>
+<h2 id="logical-vs-physical-partitioning">Logical vs Physical Partitioning</h2>
+<p>Physical partitioning is that it is AUTO. So when it reaches e.g. 50GB it partition out itself. But for logical there is a MAX.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Logical Partition</th>
+<th>Physical Partition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Definition</td>
+<td>A set of items that share the same partition key value.</td>
+<td>An internal, managed unit of scale (compute and storage).</td>
+</tr>
+<tr>
+<td>You Define</td>
+<td>You choose the partition key that creates this logical boundary.</td>
+<td>Cosmos DB manages this entirely; you cannot control its creation or placement.</td>
+</tr>
+<tr>
+<td>Purpose</td>
+<td>To group related data for efficient, single-partition queries and transactions.</td>
+<td>To distribute data and provisioned throughput across multiple physical servers.</td>
+</tr>
+<tr>
+<td>Size Limit</td>
+<td>20 GB of data. (This is a hard limit you must design your partition key to avoid hitting).</td>
+<td>50 GB of data.</td>
+</tr>
+<tr>
+<td>Throughput (RU)</td>
+<td>Limit   10,000 RU/s. (Because it cannot span a physical partition, its limit is the physical partition's limit).</td>
+<td>10,000 RU/s. (This is the throughput capacity of a single physical server/node).</td>
+</tr>
+<tr>
+<td>Mapping</td>
+<td>One or more logical partitions are mapped to a single physical partition.</td>
+<td>Contains one or more logical partitions.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="hacking-physical-partition-to-perform-faster">Hacking physical partition to perform faster.</h2>
+<p>E.g. I want to ingest 1TB of data and i want it to be very very fast. So the max we can go is only 10k instead lets say if we can ingest at 25k (making 25 physical partition), the idea is to manual provision 25k RU then behind the scene it will create 25 physical partition, using this way we can maximize and pump data concurrently.</p>
+<h2 id="no-array-in-partition">No array in partition</h2>
+<p>Consider these if exam scenarios are having arrays as partition keys. If given question goes like "what is the most efficent partition key if 1 tenant can have 1000 customers and most query goes by tenant Id and customer Id". One of the anser is using hierarchy partition key of tenantId/customerId.</p>
+<p>Given a JSON
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;tenantId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;T1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;customers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;customerId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;C1&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;purchases&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;purchaseId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;P1&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w"> </span><span class="p">}]}</span>
+</code></pre></div></p>
+<p><strong>Reality</strong>: You can create partition key of only tenantId BUT NOT tenantId/customers/customerId as customerId is in an array. In real life it has to be flattened into something like:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;tenantId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;T1&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;customerId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;C1&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;purchases&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;purchaseId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">   </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>If need to even split into tenantId/customerId/purchaseId then purchaseId is required to be even flattened.</p>
+<p><strong>NOTE</strong>: Exam question sometimes assume flattening are handled externally and answer can be /tenantId/customerId eventhough the JSON given in exam is not possible.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

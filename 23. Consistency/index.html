@@ -1,0 +1,2061 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Han">
+      
+      
+        <link rel="canonical" href="https://yoonghan.github.io/Azure-Cosmos-DB-DP-420/23.%20Consistency/">
+      
+      
+        <link rel="prev" href="../22.%20Backup/">
+      
+      
+        <link rel="next" href="../24.%20Change%20Feed/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>Consistency - Azure Cosmos DB (DP-420) Study Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#consistency" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-header__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Azure Cosmos DB (DP-420) Study Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Consistency
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../2.%20Overview/" class="md-tabs__link">
+          
+  
+  
+  Topics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../1.%20Exam_Preparation/Notes/" class="md-tabs__link">
+          
+  
+  
+  Exam
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-nav__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Azure Cosmos DB (DP-420) Study Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.%20Overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%20Replication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20Conflict_Handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.%20Analytics_Connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Azure Analytics Connectivity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.%20CosmosDB_Emulator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emulator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.%20CosmosDB_Roles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.%20InnerWorks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Innerworks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.%20Integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.%20Designing%20Database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Designing Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.%20SDK%20Errors%20Codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDK Error Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12.%20Batch%20Transaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Batch Transaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13.%20Bulk%20Execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bulk Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14.%20Queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Queries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15.%20Indexing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Indexing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16.%20Time%20To%20Live/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time To Live (TTL)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17.%20Partition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Partition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18.%20Request%20Unit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Request Unit (RU)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19.%20Gateway%20Mode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gateway Mode
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20.%20Rest%20API/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rest API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21.%20Security%20and%20Encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security And Encryption
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../22.%20Backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consistency
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consistency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configurations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDK
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-region-restriction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi Region restriction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RUs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ensure-writes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ensure writes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ensure writes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-enforces-a-unique-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Enforces a Unique Session
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#session-consistency-caveat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session Consistency caveat
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Session Consistency caveat">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deeper-understanding-on-session-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deeper Understanding on Session level
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bounded-staleness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bounded Staleness
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#difference-between-strong-and-bounded-staleness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Difference between Strong and Bounded Staleness
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-region-write-anti-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-Region Write "Anti-Pattern"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-happens-if-replication-exceeds-k-or-t-in-bounded-staleness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What happens if replication exceeds K or T in BOUNDED STALENESS?
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../24.%20Change%20Feed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Change Feed
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../25.%20CLI%20Command/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../26.%20DeveloperTools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../27.%20Stored%20Procedure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stored Procedures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../28.%20UDF%20and%20Triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UDF and Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../29.%20Features%20And%20Implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature and Implementations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../30.%20Vector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../31.%20Cognitive%20Search/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cognitive Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../32.%20Troubleshooting%20And%20Monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monitoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../33.%20Authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../34.%20Migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Exam
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Lab_Exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hands-on Labs Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configurations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDK
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-region-restriction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi Region restriction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RUs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ensure-writes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ensure writes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ensure writes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-enforces-a-unique-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Enforces a Unique Session
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#session-consistency-caveat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session Consistency caveat
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Session Consistency caveat">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deeper-understanding-on-session-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deeper Understanding on Session level
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bounded-staleness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bounded Staleness
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#difference-between-strong-and-bounded-staleness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Difference between Strong and Bounded Staleness
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-region-write-anti-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-Region Write "Anti-Pattern"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-happens-if-replication-exceeds-k-or-t-in-bounded-staleness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What happens if replication exceeds K or T in BOUNDED STALENESS?
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="consistency">Consistency</h1>
+<p>https://learn.microsoft.com/en-us/azure/cosmos-db/consistency-levels</p>
+<table>
+<thead>
+<tr>
+<th>Consistency Level</th>
+<th>Guarantee</th>
+<th>Trade-off</th>
+<th>Ideal Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Strong</td>
+<td>Highest</td>
+<td>Reads are guaranteed to return the most recent committed write. All replicas are synchronized synchronously.    Lowest Performance. Highest latency (especially across regions) and lowest throughput, as every write must be acknowledged by all replicas.</td>
+<td>Financial transactions, inventory management where absolute data accuracy is non-negotiable.</td>
+</tr>
+<tr>
+<td>2. Bounded Staleness</td>
+<td>High</td>
+<td>Reads are guaranteed to lag behind writes by no more than K versions of the item or T time interval (e.g., 5 seconds).</td>
+<td>Low Performance. Still incurs high latency, but better than Strong since a full quorum isn't required for every read.  Collaborative editing, task scheduling where near-real-time accuracy is required.</td>
+</tr>
+<tr>
+<td>3. Session</td>
+<td>Moderate (Default)</td>
+<td>Guarantees monotonic reads, monotonic writes, read-your-own-writes, and write-follows-reads within a single client session.</td>
+<td>Good Performance. Excellent balance of consistency and speed; lower latency than Strong/Bounded Staleness.</td>
+</tr>
+<tr>
+<td>4. Consistent Prefix</td>
+<td>Low</td>
+<td>Guarantees that reads never see out-of-order writes. If writes happen in order A, B, C, a reader may see A or A, B, or A, B, C, but never C, A, B.</td>
+<td>High Performance. Low latency and high availability.    Logging, event sourcing, or distributed queues where order is critical but immediacy is not.</td>
+</tr>
+<tr>
+<td>5. Eventual</td>
+<td>Lowest</td>
+<td>No guarantees on the order or time it takes for a write to be replicated. Replicas will eventually converge. Order can be inconsistent.</td>
+<td>Highest Performance. Lowest read latency and highest read throughput.    Non-critical data like social media likes/comments, usage logs, or high-volume telemetry data.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="configurations">Configurations</h2>
+<ol>
+<li>Consistency is at <strong>Account</strong> level! </li>
+<li>Can be changed per request via SDK for read consistency. Write is <strong>FIXED</strong> with account level.</li>
+</ol>
+<p><img alt="Consistency Levels" src="../img/consistency_levels.png" /></p>
+<h2 id="sdk">SDK</h2>
+<ol>
+<li>Consistency can be change per request.</li>
+<li>Consistency can only be relax not strengthen. Means if account is Session, cannot set as Strong but can go Eventually.</li>
+<li>Session token can be pulled from response and then put as request. In SDK this is already handled.</li>
+<li>The ConsistencyLevel for SDK setting is only used to only weaken the consistency level for reads. It can't be strengthened or applied to writes.</li>
+</ol>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="n">ItemRequestOptions</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">()</span>
+<span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">ConsistencyLevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ConsistencyLevel</span><span class="p">.</span><span class="n">Eventual</span><span class="w"> </span>
+<span class="p">};</span>
+</code></pre></div></p>
+<p><strong>Example to pull token</strong>
+<div class="highlight"><pre><span></span><code><span class="err">#</span><span class="w"> </span><span class="n">SDK</span><span class="w"> </span><span class="n">actually</span><span class="w"> </span><span class="n">handles</span><span class="w"> </span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">but</span><span class="w"> </span><span class="k">this</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">example</span><span class="p">.</span>
+<span class="n">ItemResponse</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">container</span><span class="p">.</span><span class="n">CreateItemAsync</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+<span class="kt">string</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">response</span><span class="p">.</span><span class="n">Headers</span><span class="p">.</span><span class="n">Session</span><span class="p">;</span>
+<span class="n">ItemRequestOptions</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">()</span>
+<span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="n">SessionToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">token</span>
+<span class="p">};</span>
+<span class="n">ItemResponse</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span><span class="w"> </span><span class="n">readResponse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">container</span><span class="p">.</span><span class="n">ReadItemAsync</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">partitionKey</span><span class="p">,</span><span class="w"> </span><span class="n">requestOptions</span><span class="p">:</span><span class="w"> </span><span class="n">options</span><span class="p">);)</span>
+</code></pre></div></p>
+<h2 id="multi-region-restriction">Multi Region restriction</h2>
+<p>Strong consistency is strongest it can support is, but it <strong>CANNOT</strong> be supported in a <em>multi-region write</em> scenario(only up-to Bounded Staleness). Don't be mistaken with multi-region read scenario which can be supported with strong consistency; can only write in one region, then let it replicate.</p>
+<table>
+<thead>
+<tr>
+<th>Consistency Level</th>
+<th>Write Completion Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Strong</td>
+<td>The write must be committed to ALL regions globally before returning success.</td>
+</tr>
+<tr>
+<td>Bounded Staleness</td>
+<td>The write must be committed to a LOCAL MAJORITY in the write region before returning success, and the system throttles writes to ensure global replication stays within a defined $K/T$ bound.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="rus">RUs</h2>
+<p>Your choice of consistency model also affects the throughput. You can get approximately 2x read throughput for the more relaxed consistency levels (session, *consistent prefix, and eventual consistency) compared to stronger consistency levels (bounded staleness or strong consistency).</p>
+<p>Strong and Bounded Staleness consumes 2X the RUs. Session ideally is higher than Consistent Prefix (higher than 1RU)</p>
+<table>
+<thead>
+<tr>
+<th>Consistency Level</th>
+<th>RU Consumption for Reads</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Strong</td>
+<td>$\approx 2\times$ the cost of weaker levels</td>
+<td>Requires reading from at least two replicas (a quorum read) to ensure the most up-to-date data is returned. This doubles the RU consumption compared to reading from a single replica.</td>
+</tr>
+<tr>
+<td>Bounded Staleness</td>
+<td>$\approx 2\times$ the cost of weaker levels</td>
+<td>Similar to Strong, it requires a quorum read (reading from two replicas) to enforce its strict bounds on staleness.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ensure-writes">Ensure writes</h2>
+<p>If Customers must be able to sign in and maintain a unique session. The system will NOT allow two sessions to be established for the same user. Then only "STRONG" consistency must be configured. This is something to do with "PARTITION KEY" + DB Account level. Else use store procedure.</p>
+<h3 id="how-it-enforces-a-unique-session">How It Enforces a Unique Session</h3>
+<ol>
+<li>A user attempts to create a session in Region A.</li>
+<li>Region A checks the database to see if a session exists for this user.</li>
+<li>If no session exists, Region A attempts to write the new session record.</li>
+<li>The write operation is blocked until it has been successfully replicated and committed to all other regions (e.g., Region B, C, etc.).</li>
+<li>If another user attempts to create a session in Region B for the same user at the exact same time, Region B's request will either:
+Wait for Region A's write to complete and be globally committed, at which point Region B will see the new session record and reject the second request.
+Fail its own write attempt because Strong Consistency ensures only one global state, preventing the duplicate write.</li>
+</ol>
+<h2 id="session-consistency-caveat">Session Consistency caveat</h2>
+<ul>
+<li>
+<p>When working with Session consistency, each new write request to Azure Cosmos DB is assigned a new <strong>SessionToken</strong>. CosmosClient <strong>will use this token internally with each read/query request to ensure that the set consistency level is maintained</strong>. </p>
+</li>
+<li>
+<p>Does NOT necessarily require Session consistency when using Session token. Pass sessionToken from write response into subsequent read request headers. Meaning the SDK can be using eventually consistency, but session consistency still works. The header is <code>x-ms-session-token</code></p>
+</li>
+</ul>
+<p><strong>If you are using a round-robin load balancer that does not maintain session affinity between requests,</strong> the read can potentially land on a different node to the write request, where the session was originally created. To ensure that you can read your writes, use the session token that was last generated for the relevant item(s). To manage session tokens manually, get the session token from the response and set them per request.</p>
+<p>In other words need to get Session token from header then populate it in the query. But THIS does not explain if it runs on different node how do we set a session from write to a read ... need to implement some fast cache or db.</p>
+<p><strong>Take note if not writing application</strong> that is not controlling SESSION, the closest consistency with low RU is Consistent Prefix.</p>
+<p>The core of the problem, and why the official answer for this type of exam question is D. Consistent Prefix, is often tied to the interpretation of queries (non-transactional read operations) that might span multiple partitions:</p>
+<p><strong>Session Consistency</strong> requires maintaining a session token for each logical partition accessed by a client. While Session provides strong guarantees within a single user's session, a query that spans multiple logical partitions often effectively degrades to Consistent Prefix for the results returned across all partitions in the query.</p>
+<p><strong>Consistent Prefix</strong> provides a global ordering guarantee across all replicas/partitions (data is never seen out of order). It is considered the highest global guarantee you can get without incurring the double RU cost of Strong or Bounded Staleness.</p>
+<h3 id="deeper-understanding-on-session-level">Deeper Understanding on Session level</h3>
+<ol>
+<li>Good to understand that it contains partition key/range id. Reason: Main concept is that it doesn't store anything in db, it's a combination of string/values.</li>
+<li>Even if there are failover, nothing should be affected only latency during read. Ideally once write confirms and return the session token, those values can be deciphered and be read and validated.</li>
+<li>For application read that uses session token. Given that application starts up has not session token, it's best practise to check null for session token and then change the consistency level until session token is provided.</li>
+</ol>
+<p>Need not to memorise:
+The session token is the mechanism used by the Cosmos DB service and SDK to enforce these guarantees.</p>
+<p>Token Generation (on Write): When you perform a write operation, the write is applied to the primary replica. The service returns an updated SessionToken in the response header. This token is not a random hash; it is an identifier that includes critical, service-generated, and partition-specific metadata.</p>
+<p>Token Structure: The token's format is detailed but generally includes components like:</p>
+<p>The Partition Key Range ID (identifies the physical partition).</p>
+<p>The Logical Sequence Number (LSN) or a version identifier for that partition. This is the transactional identifier for the write that occurred.</p>
+<p>A map of version IDs across different regions (in multi-region accounts).</p>
+<p>Example format (Vector Token): 0:0#2#1=-1 (The actual format can vary based on SDK version and account configuration).</p>
+<h2 id="bounded-staleness">Bounded Staleness</h2>
+<ol>
+<li>Max Staleness Prefix (K): The maximum number of versions (updates) a read can lag behind the latest write.  </li>
+<li>Max Staleness Interval (T): The maximum time interval a read can lag behind the latest write.</li>
+</ol>
+<p>When the lag in a secondary region (replica) exceeds either the Max Interval (T) or the Max Prefix (K) for a specific physical partition:
+• The system recognizes that the replica is now too stale and is violating the set bound.
+• To prevent the staleness from growing further, new writes to that specific partition are throttled (rate-limited).  
+• This throttling forces the system to pause accepting new updates until the asynchronous background replication process can catch up and bring the replica's lag back within the specified \text{T} or \text{K} boundary.  </p>
+<p>In essence, the system sacrifices availability (writes) to maintain the consistency boundary defined by the time and version limits.</p>
+<h2 id="difference-between-strong-and-bounded-staleness">Difference between Strong and Bounded Staleness</h2>
+<ul>
+<li>Strong Consistency acts before the write is accepted: it ensures the write is visible everywhere before it is considered successful. </li>
+<li>Bounded Staleness acts after the write is accepted: it is an enforcement mechanism that slows future writes to allow slower replicas to catch up when the lag boundary is breached.</li>
+<li>Azure Cosmos DB does not support Strong consistency for accounts configured with multi-region writes. This is a fundamental limitation because Strong consistency requires a synchronous cross-region handshake for every write, which contradicts the low-latency, "write-anywhere" goal of multi-region writes.</li>
+</ul>
+<h2 id="multi-region-write-anti-pattern">Multi-Region Write "Anti-Pattern"</h2>
+<p>If you have Multi-Region Writes (Multi-Master) enabled, using Bounded Staleness is considered an anti-pattern.</p>
+<p>In multi-write accounts, the system expects each region to act independently for high availability.</p>
+<p>If you use Bounded Staleness, a network "hiccup" or heavy load in Region A could cause writes to be blocked in Region B, defeating the purpose of having multiple write regions.</p>
+<p>For multi-write setups, Session Consistency is usually the recommended choice.</p>
+<h2 id="what-happens-if-replication-exceeds-k-or-t-in-bounded-staleness">What happens if replication exceeds K or T in BOUNDED STALENESS?</h2>
+<div class="highlight"><pre><span></span><code>az<span class="w"> </span>cosmosdb<span class="w"> </span>update<span class="w"> </span>--name<span class="w"> </span>&lt;account-name&gt;<span class="w"> </span>--resource-group<span class="w"> </span>&lt;resource-group&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--default-consistency-level<span class="w"> </span>BoundedStaleness<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--max-staleness-prefix<span class="w"> </span><span class="m">100000</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--max-staleness-interval-in-seconds<span class="w"> </span><span class="m">300</span>
+</code></pre></div>
+<p>If the replication lag in any secondary region exceeds either of your configured thresholds (K or T), the following happens:</p>
+<ul>
+<li>Write Throttling in the Primary Region: To honor the guarantee that data won't get "too stale," Azure Cosmos DB will throttle new writes in the primary region.9 This means the primary region stops accepting new data for those specific partitions until the secondary regions have caught up and the lag falls back within the defined bounds.</li>
+<li>Error Code: Your application will typically receive an HTTP 429 (Too Many Requests) error.</li>
+<li>Behavior: The system prioritizes consistency over availability in this specific failure mode.</li>
+<li>Read Availability:Reads in the secondary (stale) region will continue to work.12 They will return the most recent data that has successfully reached that region. While this data is "stale" relative to the primary, it is guaranteed to be no older than your 100,000K or 30T settings.</li>
+<li>Consistency Guarantee:Even during the lag, the system maintains Consistent Prefix guarantees.16 This ensures that a reader will never see writes out of order; they simply see a slightly older "snapshot" of the data.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

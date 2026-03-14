@@ -1,0 +1,2027 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Han">
+      
+      
+        <link rel="canonical" href="https://yoonghan.github.io/Azure-Cosmos-DB-DP-420/22.%20Backup/">
+      
+      
+        <link rel="prev" href="../21.%20Security%20and%20Encryption/">
+      
+      
+        <link rel="next" href="../23.%20Consistency/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>Backup - Azure Cosmos DB (DP-420) Study Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#backup" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-header__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Azure Cosmos DB (DP-420) Study Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Backup
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../2.%20Overview/" class="md-tabs__link">
+          
+  
+  
+  Topics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../1.%20Exam_Preparation/Notes/" class="md-tabs__link">
+          
+  
+  
+  Exam
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-nav__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Azure Cosmos DB (DP-420) Study Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.%20Overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%20Replication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20Conflict_Handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.%20Analytics_Connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Azure Analytics Connectivity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.%20CosmosDB_Emulator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emulator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.%20CosmosDB_Roles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.%20InnerWorks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Innerworks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.%20Integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.%20Designing%20Database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Designing Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.%20SDK%20Errors%20Codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDK Error Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12.%20Batch%20Transaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Batch Transaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13.%20Bulk%20Execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bulk Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14.%20Queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Queries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15.%20Indexing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Indexing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16.%20Time%20To%20Live/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time To Live (TTL)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17.%20Partition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Partition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18.%20Request%20Unit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Request Unit (RU)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19.%20Gateway%20Mode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gateway Mode
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20.%20Rest%20API/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rest API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21.%20Security%20and%20Encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security And Encryption
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roles
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#periodic-backup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Periodic backup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuous-backup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous backup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Continuous backup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#limitations-when-using-the-continuous-backup-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations when using the continuous backup mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-to-restore-a-backup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request to restore a backup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Request to restore a backup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#periodic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Periodic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#continuouspoint-in-time-restore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous/Point in Time Restore
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backup-restore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backup restore
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backup-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backup notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuous-backup-vs-periodic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous Backup vs Periodic
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redundancy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Redundancy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Redundancy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#periodic_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Periodic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#continuous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../23.%20Consistency/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consistency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../24.%20Change%20Feed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Change Feed
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../25.%20CLI%20Command/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../26.%20DeveloperTools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../27.%20Stored%20Procedure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stored Procedures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../28.%20UDF%20and%20Triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UDF and Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../29.%20Features%20And%20Implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature and Implementations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../30.%20Vector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../31.%20Cognitive%20Search/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cognitive Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../32.%20Troubleshooting%20And%20Monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monitoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../33.%20Authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../34.%20Migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Exam
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Lab_Exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hands-on Labs Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roles
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#periodic-backup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Periodic backup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuous-backup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous backup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Continuous backup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#limitations-when-using-the-continuous-backup-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations when using the continuous backup mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-to-restore-a-backup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request to restore a backup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Request to restore a backup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#periodic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Periodic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#continuouspoint-in-time-restore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous/Point in Time Restore
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backup-restore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backup restore
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backup-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backup notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuous-backup-vs-periodic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous Backup vs Periodic
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redundancy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Redundancy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Redundancy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#periodic_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Periodic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#continuous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="backup">Backup</h1>
+<p>There are only 2 backup modes:
+1. Continuous Backup
+2. Periodic Backup</p>
+<h2 id="roles">Roles</h2>
+<p>Cosmos DB Backup Operator- can only backup db
+Cosmos DB Restore Operator - can only restore from Db, but requires Cosmos Db operator else cannot create new container
+Cosmos DB Operator - creates account, db and container. But cannot view data.</p>
+<h2 id="periodic-backup">Periodic backup</h2>
+<p>(you cannot change a Cosmos DB account with continuous backup back to periodic backup mode.)</p>
+<ul>
+<li>Backup Interval - This setting defines how often is the backup going to be done. Can be changed in minutes or hours. The interval period can be between 1 and 24 hours. The default is 240 minutes (4 hours).</li>
+<li>Backup Copies - By default only the last 2 are stored.</li>
+<li>Backup Retention - This setting defines how long should the backups be kept. Can be changed in hours or days. The retention period will be at <strong>least two times the backup interval</strong> and 720 hours (or 30 days) at the most. The default is 8 Hours. Maximum is 30 days.</li>
+<li>Backup storage redundancy - One of the three redundancy options - LRS, ZRS, GRS. The default is Geo-redundant backup storage.</li>
+<li>No RUs is consumed for backup.</li>
+<li>Backup charges - first 2 backups storage are free.</li>
+</ul>
+<p><strong>Notes</strong>:
+- A <strong>full backup is taken every 4 hours</strong>. Only the <strong>last two backups</strong> are stored by default. Both the backup interval and the retention period can be configured in the Azure portal. This configuration can be set during or after the Azure Cosmos DB account has been created.
+- If Azure Cosmos DB's containers or database are deleted, the existing container and database <strong>snapshots will be retained for 30 days.</strong>
+- Azure Cosmos DB backups are stored in <strong>Azure Blob storage</strong>.
+- Backups are <strong>stored</strong> in the current <strong>write region or if using multi-region writes</strong> to one of the write regions to guarantee low latency.
+- Snapshots of the backup are <strong>replicated to another region through geo-redundant storage (GRS)</strong> by default. This replication provides resiliency against regional disasters. Can be changed to <strong>ZRS</strong> or <strong>LRS</strong>.
+- Backups <strong>can't be accessed directly</strong>. <strong>To restore the backup, a support ticket needs to be opened</strong> with the Azure Cosmos DB team.
+- Backups won't affect performance or availability. Furthermore, <strong>no RUs are consumed during the backup</strong> process.</p>
+<p>By default, locally redundant storage accounts are used to store the backups in each region. When Availability zones are enabled for a region, the backups are then stored in a Zone-Redundant storage account. This storage redundancy can't be updated when using the continuous backup mode.</p>
+<h2 id="continuous-backup">Continuous backup</h2>
+<ul>
+<li>only 7 days free or 30 days</li>
+<li>You can do your own POINT-IN-TIME restoration compared to periodic (no ticket). For Azure Cosmos DB restores, you never restore on top of and existing account, and will always have to create a new Azure Cosmos DB account.</li>
+<li>Only deleted databases, containers can be restored to the SAME ACCOUNT. Otherwise, data/account restoration have to be in new account.</li>
+</ul>
+<h3 id="limitations-when-using-the-continuous-backup-mode">Limitations when using the continuous backup mode</h3>
+<p>See - https://learn.microsoft.com/en-us/azure/cosmos-db/continuous-backup-restore-introduction?context=%2Fazure%2Fcosmos-db%2Fcontext%2Fcontext#understand-multi-region-write-account-restore</p>
+<ul>
+<li>Azure Cosmos DB accounts using customer-managed keys without permission aren't supported.</li>
+<li>Multi-region write accounts not supported. (NOW SUPPORTED - https://learn.microsoft.com/en-sg/azure/cosmos-db/continuous-backup-restore-introduction?context=%2Fazure%2Fcosmos-db%2Fnosql%2Fcontext%2Fcontext#understand-multi-region-write-account-restore)</li>
+<li>You can't restore an account into a region where the source account didn't exist.</li>
+<li>The retention period is 7 or 30 days and can't be changed.</li>
+<li>Restoration is up to seconds precision.</li>
+<li>Can't modify or delete IAM policies when restore is in progress.</li>
+<li>Accounts that create unique indexes after the container is created aren't supported.</li>
+<li>Point in time restore always restores to a new Azure Cosmos DB account.(with condition)</li>
+<li>Collection's consistent indexes may still be rebuilding after completing the restore.</li>
+<li>Since TTL container properties are restored with the restore process(if restore container the TTL properties are restored as well), restores must be for timestamps before TTL properties were added to a container. This timestamp will prevent data from being deleted right after the restore, else it get deleted immediately. You can to set --disable-ttl to prevent deletion with restore property.</li>
+<li>Currently, customers that disabled Synapse Link (deprecated) from containers can't migrate to continuous backup. And analytical store isn't included in backups.</li>
+<li>NO Cassandra support.</li>
+<li>NO SHARED THROUGHPUT CONTAINER RESTORE. A <strong>subset of containers under a shared throughput database</strong> can't be restored. The entire database can be restored as a whole.</li>
+</ul>
+<p>If you did not disable Multi-region writes when you created your Azure Cosmos DB account, you will need to do it now or enabling the continuous backup feature will fail. You can disable multi-region writes unde the Replicate data globally Settings section.</p>
+<p><img alt="Backup Periodic" src="../img/backup_periodic.png" /></p>
+<h2 id="request-to-restore-a-backup">Request to restore a backup</h2>
+<h3 id="periodic">Periodic</h3>
+<p>If you need to restore a database or container, you'll need to <strong>open a request ticket or call the Azure support team.</strong> Azure support is available for all plans except for the Basic plan. You must have Azure Cosmos DB owner, contributor, or have the Cosmos DB Operator (CosmosdbBackupOperator) role assigned to request a restore from the portal.</p>
+<p>NOTE: 
+1. CosmosdbBackupOperator is the only one who can request.
+2. Basic plan cannot restore db.</p>
+<h3 id="continuouspoint-in-time-restore">Continuous/Point in Time Restore</h3>
+<p>Restore Scenarios
+Let's review several point-in-times restores scenarios:</p>
+<ul>
+<li><strong>Restore deleted account</strong> - Deleted accounts that can be restored are visible in the Restore pane under the Azure Cosmos DB account list page. The information needed for the restore is the timestamp right before the delete, the account name of the deleted account, and the target name to be restored as. Restores can be performed from the Azure portal, PowerShell, or CLI.</li>
+<li><strong>Restore data of an account in a particular region</strong> - If you need a copy in a region of an Azure Cosmos DB Account you can do a point in time restore of the account. The information needed for the restore is the desired timestamp, and the target name to be restored as. Restores can be performed from the Azure portal, PowerShell, or CLI.</li>
+<li><strong>Recover from an accidental write or delete operation within a container with a known restore timestamp</strong> - If you know the timestamp when the accidental operation was done, you can do a point in time restore from Azure portal, PowerShell, or CLI into another account at the desired timestamp to recover to.
+<strong>Restore an account to a previous point in time before the accidental delete of the database</strong> - Under the point in time page, use the event feed pane to determine when the database was deleted, and find the restore time. You can do a point in time restore from Azure portal, PowerShell, or CLI into another account at the desired timestamp to recover to.</li>
+<li><strong>Restore an account to a previous point in time before the accidental delete or modification of the container properties</strong> - Under the point in time page, use the event feed pane to determine when the container was created, modified, or deleted and find the restore time. You can do a point in time restore from Azure portal, PowerShell, or CLI into another account at the desired timestamp to recover to.</li>
+</ul>
+<h2 id="backup-restore">Backup restore</h2>
+<p>Backup does not restore:</p>
+<ul>
+<li>VNET access control lists</li>
+<li>Stored procedures, triggers, and user-defined functions</li>
+<li>Multi-region settings</li>
+<li>Consistency settings. By default, the account is restored with <em>session</em> consistency.</li>
+</ul>
+<p>OR you can say it can only restore
+1. Cosmos DB account. A new Azure Cosmos DB account is created to hold the data every time you restore a backup. Data can't be restored to an existing Azure DB account. The account created will have the <Azure_Cosmos_account_original_name>-restored# name format, where # is an incremental digit when you're doing multiple restores against the same account. <em>NEVER recreate it</em>
+3. Azure Cosmos DB database
+4. Azure Cosmos DB database -&gt; containers
+5. Items within a container.  <em>If your retention period is set to anything less that seven days, it's a good practice to temporarily increase your retention period to at least seven days to make sure your backups aren't overwritten while you open the support ticket.</em></p>
+<p>NOTE: For periodic backup restore, do not create the same CosmosDBAccount. If you delete the Azure Cosmos DB account, and wish to recover it with the same name, don't recreate it. Just ask the Azure support team to <strong>recreate it with the original name</strong>. The restored account will have the same <strong>provisioned throughput, indexing policies, and will be in the same region</strong> as the original account.</p>
+<h2 id="backup-notes">Backup notes</h2>
+<ul>
+<li>Backup can only restore to same region but not necessary same account.</li>
+<li>Only cassandara cannot backup with Continous backup! (But periodic is ok)</li>
+<li>2 roles required "CosmosDBOperator"(permission to write) and "CosmosRestoreOperator" permission to restore.</li>
+<li>Serverless cannot do periodic backup only continuous. NO DOCUMENTATION BUT YES it doesn't. Why??</li>
+</ul>
+<p>Learn: https://microsoftlearning.github.io/dp-420-cosmos-db-dev/instructions/27-backup-recover.html</p>
+<h2 id="continuous-backup-vs-periodic">Continuous Backup vs Periodic</h2>
+<p>Continuous has only
+- 7 days (Free)
+- 30 days
+Continuous is only Zone/Local. You can achieve geo backup only and if geo-write is enabled.</p>
+<p>Periodic (Custom) by hours and store for days.
+Periodic have configuration for:
+ - Need specify Retention(1-30 days) and Interval(1-24 hours)
+ - Geo redundant, even not multi-region it can be geo backup
+ - Zone redundant
+ - Locally redundant</p>
+<p>## Recovery caveat</p>
+<p>CMK and Recovery
+If the database or account was encrypted with CMK at the time of the backup, the ability to restore and access the data depends entirely on the availability and access to the necessary encryption key.</p>
+<p>Scenario 1: You have the new CMK (Key 2) AND the old CMK (Key 1).</p>
+<p>Yes, you can recover. When CMK is rotated (Key 1 is replaced with Key 2), the data is typically re-encrypted over time. However, the service maintains the ability to use the older key to decrypt data encrypted with it, especially for backups taken before the rotation was complete.</p>
+<p>For a Point-in-Time Restore (PITR) in Azure Cosmos DB, the restore operation usually requires that the target account's identity has access to all the necessary key versions (both old and new) that were used to encrypt the data in the backup time range.</p>
+<p>Scenario 2: You only have the new CMK (Key 2) but the database was using the old CMK (Key 1) at the backup time.</p>
+<p>Recovery is uncertain or may fail for data encrypted with Key 1. If a backup was taken while the database was encrypted with Key 1, and Key 1 is now deleted or permanently inaccessible (e.g., revoked permissions, key vault deleted without soft-delete), you won't be able to decrypt the data protected by Key 1, and the recovery will likely fail or the restored data will be inaccessible. The backup itself is encrypted with the key active at that time.</p>
+<p>Scenario 3: You have rotated the key (Key 2 is in use) and take a new backup.</p>
+<p>Yes, recovery is possible. Any new backups taken after the key change will be encrypted with Key 2. As long as Key 2 is available and the account's managed identity has the correct Get, Wrap Key, and Unwrap Key permissions on the Azure Key Vault, the restore will succeed.</p>
+<h2 id="redundancy">Redundancy</h2>
+<h3 id="periodic_1">Periodic</h3>
+<p>There are option for redundancy for
+- GRS (total 6, 3 copies in primary region, 3 more in secondary)
+- ZRS (total 3 copies, although ZRS is 3 and above )
+- LRS (total 3 copy in 1 single location)</p>
+<h3 id="continuous">Continuous</h3>
+<ol>
+<li>Cannot be set</li>
+<li>set as ZRS (IF AND ONLY IF Region support it, like for malaysia no ZRS) and Availability Zone is selected (option when creating account).</li>
+<li>always stored automatically as LRS per region.</li>
+<li>Region do happen if multi-region is added. But remember backup can only restore to same region so there is only ZRS.</li>
+<li>If consistency of Strong bounded, the write region backups only that are confirmed (approved by all regions).</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

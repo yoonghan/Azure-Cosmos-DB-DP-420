@@ -1,0 +1,2420 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Han">
+      
+      
+        <link rel="canonical" href="https://yoonghan.github.io/Azure-Cosmos-DB-DP-420/14.%20Queries/">
+      
+      
+        <link rel="prev" href="../13.%20Bulk%20Execution/">
+      
+      
+        <link rel="next" href="../15.%20Indexing/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>Queries - Azure Cosmos DB (DP-420) Study Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#queries" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-header__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Azure Cosmos DB (DP-420) Study Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Queries
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../2.%20Overview/" class="md-tabs__link">
+          
+  
+  
+  Topics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../1.%20Exam_Preparation/Notes/" class="md-tabs__link">
+          
+  
+  
+  Exam
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-nav__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Azure Cosmos DB (DP-420) Study Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.%20Overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%20Replication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20Conflict_Handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.%20Analytics_Connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Azure Analytics Connectivity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.%20CosmosDB_Emulator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emulator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.%20CosmosDB_Roles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.%20InnerWorks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Innerworks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.%20Integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.%20Designing%20Database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Designing Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.%20SDK%20Errors%20Codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDK Error Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12.%20Batch%20Transaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Batch Transaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13.%20Bulk%20Execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bulk Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Queries
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Queries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-partition-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross partition Query
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cross partition Query">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it Works
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notes-for-cross-partition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes for cross partition:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pagination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pagination
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#join-for-arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Join for arrays
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alternative
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-array" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using ARRAY
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using ARRAY">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nice-to-know" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nice to know
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting queries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optimistic-direct-execution-ode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optimistic Direct Execution (ODE)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#check-query-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check Query performance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aggregation-and-udf-are-much-efficient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aggregation and UDF are much efficient
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#point-vs-query-read" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Point vs Query Read
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#headers-for-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Headers for Query
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compute-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compute Properties
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subqueries-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subqueries performance
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15.%20Indexing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Indexing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16.%20Time%20To%20Live/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time To Live (TTL)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17.%20Partition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Partition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18.%20Request%20Unit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Request Unit (RU)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19.%20Gateway%20Mode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gateway Mode
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20.%20Rest%20API/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rest API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21.%20Security%20and%20Encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security And Encryption
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../22.%20Backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../23.%20Consistency/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consistency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../24.%20Change%20Feed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Change Feed
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../25.%20CLI%20Command/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../26.%20DeveloperTools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../27.%20Stored%20Procedure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stored Procedures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../28.%20UDF%20and%20Triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UDF and Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../29.%20Features%20And%20Implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature and Implementations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../30.%20Vector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../31.%20Cognitive%20Search/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cognitive Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../32.%20Troubleshooting%20And%20Monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monitoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../33.%20Authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../34.%20Migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Exam
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Lab_Exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hands-on Labs Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-partition-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross partition Query
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cross partition Query">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it Works
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notes-for-cross-partition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes for cross partition:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pagination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pagination
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#join-for-arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Join for arrays
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alternative
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-array" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using ARRAY
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using ARRAY">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nice-to-know" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nice to know
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting queries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optimistic-direct-execution-ode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optimistic Direct Execution (ODE)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#check-query-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check Query performance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aggregation-and-udf-are-much-efficient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aggregation and UDF are much efficient
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#point-vs-query-read" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Point vs Query Read
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#headers-for-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Headers for Query
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compute-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compute Properties
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subqueries-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subqueries performance
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="queries">Queries</h1>
+<ol>
+<li>Queries support both single (') and double (") quotes for strings.</li>
+<li>Query supports only single container, hence using alias, container name or both together does not make any diff.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">category</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">category</span><span class="p">.</span><span class="n">id</span><span class="o">=</span><span class="s1">&#39;0120&#39;</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">category</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">id</span><span class="o">=</span><span class="ss">&quot;0120&quot;</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">eee</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">eee</span><span class="p">.</span><span class="n">id</span><span class="o">=</span><span class="s1">&#39;0120&#39;</span>
+</code></pre></div>
+<h2 id="functions">Functions</h2>
+<p>Mostly can be found in MS Learn site, interesting functions are:
+  - CONCAT
+  - LOWER
+  - IS_DEFINED
+  - IS_ARRAY
+  - IS_NUMBER
+  - SELECT DISTINCT VALUE
+    p.categoryName
+FROM
+    products p
+- SCALAR
+     SELECT
+      ("Redmond" = "WA") AS isCitySameAsState,</p>
+<p>VALUE is to flatten. E.g.
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">categoryId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Books&#39;</span><span class="w">   </span><span class="o">//</span><span class="p">[</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="ss">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="ss">&quot;Dinosaur&quot;</span><span class="w"> </span><span class="err">}</span><span class="p">,</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="ss">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="ss">&quot;Monster&quot;</span><span class="w"> </span><span class="err">}</span><span class="w"> </span><span class="p">]</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">VALUE</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">categoryId</span><span class="o">=</span><span class="s1">&#39;Books&#39;</span><span class="w"> </span><span class="o">//</span><span class="p">[</span><span class="ss">&quot;Dinosaur&quot;</span><span class="p">,</span><span class="ss">&quot;Monster&quot;</span><span class="p">]</span>
+</code></pre></div></p>
+<p><div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">VALUE</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">categoryId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Books&#39;</span><span class="w"> </span><span class="o">//</span><span class="p">[</span><span class="w"> </span><span class="ss">&quot;Dinosaur&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;Monster&quot;</span><span class="w"> </span><span class="p">]</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">VALUE</span><span class="w"> </span><span class="err">{</span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="err">}</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">{</span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="ss">&quot;Dinosaur&quot;</span><span class="err">}</span><span class="p">]</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="s1">&#39;price&#39;</span><span class="p">:</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">price</span><span class="err">}</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">scannerData</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">{</span><span class="n">scannerData</span><span class="p">:</span><span class="w"> </span><span class="err">{</span><span class="ss">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">10</span><span class="err">}}</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="s1">&#39;price&#39;</span><span class="p">:</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">price</span><span class="err">}</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="err">$</span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="err">{</span><span class="n">price</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="err">}</span><span class="w"> </span><span class="err">}</span>
+</code></pre></div>
+https://learn.microsoft.com/en-sg/azure/cosmos-db/nosql/query/select</p>
+<p>IN for array</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="k">user</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">   </span><span class="k">SELECT</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">items</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">sku</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<span class="p">)</span><span class="w"> </span><span class="o">//</span><span class="err">{</span><span class="n">items</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">{</span><span class="n">sku</span><span class="p">:</span><span class="mi">1</span><span class="err">}</span><span class="p">,</span><span class="w"> </span><span class="err">{</span><span class="n">sku</span><span class="p">:</span><span class="mi">2</span><span class="err">}</span><span class="p">]</span><span class="o">**</span>
+</code></pre></div>
+<p>Specific array</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">VALUE</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">categories</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ProductsContainer</span><span class="w"> </span><span class="k">c</span>
+</code></pre></div>
+<h2 id="cross-partition-query">Cross partition Query</h2>
+<p>The '<strong>enableCrossPartitionQuery</strong>' option in Azure Cosmos DB is a flag that explicitly allows a query to be executed across all physical partitions of a container.</p>
+<p>In a partitioned Cosmos DB container, data is divided into smaller subsets based on the partition key you defined.</p>
+<h3 id="how-it-works">How it Works</h3>
+<p>Default Behavior (Single-Partition Query): If your query contains a filter on the partition key (e.g., SELECT * FROM c WHERE c.userId = '123'), the SDK knows exactly which partition to route the query to. This is the most efficient type of query and doesn't require the enableCrossPartitionQuery flag.</p>
+<p>Cross-Partition Query: If your query does not include a filter on the partition key (e.g., SELECT * FROM c WHERE c.city = 'Seattle'), the Azure Cosmos DB SDK must check every physical partition to find matching documents.</p>
+<ul>
+<li>In earlier versions of the SDKs, attempting such a query without explicitly setting 'enableCrossPartitionQuery': true would result in an error, as a safety mechanism to prevent accidentally executing an expensive query.</li>
+<li>Setting the flag to true explicitly tells the client and the service, "I know this query will scan all partitions, and I permit it."</li>
+</ul>
+<p>Very hard to test, only happens if:
+Imagine you add millions of new items with thousands of unique categoryId values. Your container's storage will exceed 50 GB, or your provisioned throughput will exceed 10,000 RU/s.</p>
+<p>Cosmos DB will automatically split the data and create multiple physical partitions (e.g., 5 partitions) to scale out the container.</p>
+<p>Query: SELECT * FROM p WHERE p.price &gt; 2
+Physical Partitions: 5 (Large Data Volume)
+Result with enableCrossPartitionQuery: false: Error (or no results in older SDKs).</p>
+<p>Reason: The query does not contain the partition key filter (categoryId). The SDK cannot determine which of the 5 partitions to use, and since you have explicitly forbidden a cross-partition fan-out, the operation fails.</p>
+<p>A query that filters on a different property, such as favoriteColor, would "fan out" to all partitions in the container. This is also known as a cross-partition query. Such a query will perform as expected when the container is small and occupies only a single partition. However, as the container grows and there are increasing number of physical partitions, this query will become slower and more expensive because it will need to check every partition to get the results whether the physical partition contains data related to the query or not.</p>
+<p>Diagram that shows a cross-partition query for favorite color.</p>
+<p><img alt="Cross Partition Query" src="../img/query_cross_partition.png" /></p>
+<h3 id="notes-for-cross-partition">Notes for cross partition:</h3>
+<ol>
+<li>Cross-partition querying does not happen if there is an exact match on the partition key. E.g. <code>SELECT * from n where n.age=10 AND n.orderId=10</code>; in this case, if the partition key is <code>orderId</code>, there is no cross-partition query. (Note that it uses <code>AND</code> and <code>=</code>).</li>
+<li>Even with the keyfield id, it is best to provide partitionKey. Else it will cause cross-partition/fanout.</li>
+</ol>
+<h2 id="pagination">Pagination</h2>
+<p>Behind the scene it's using continuation token
+- Cannot use GROUP BY, where it cannot work.
+- Works with SELECT DISTINCT, when used with ORDER BY.
+- Records/results need to be iterated (this is pagination)</p>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">maxItemCount</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="w"> </span><span class="c1">// Set the maximum number of items per page</span>
+<span class="p">};</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">iterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">container</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span><span class="w"> </span><span class="nx">options</span><span class="p">);</span>
+
+<span class="k">for</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">page</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">iterator</span><span class="p">.</span><span class="nx">getAsyncIterator</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">page</span><span class="p">.</span><span class="nx">resources</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">product</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`[</span><span class="si">${</span><span class="nx">product</span><span class="p">.</span><span class="nx">id</span><span class="si">}</span><span class="sb">] </span><span class="si">${</span><span class="nx">product</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="sb"> $</span><span class="si">${</span><span class="nx">product</span><span class="p">.</span><span class="nx">price</span><span class="p">.</span><span class="nx">toFixed</span><span class="p">(</span><span class="mf">2</span><span class="p">)</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;SELECT * FROM products p&quot;</span><span class="p">;</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">iterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">container</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">query</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nx">iterator</span><span class="p">.</span><span class="nx">hasMoreResults</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">resources</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">iterator</span><span class="p">.</span><span class="nx">fetchNext</span><span class="p">();</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">item</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">resources</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`[</span><span class="si">${</span><span class="nx">item</span><span class="p">.</span><span class="nx">id</span><span class="si">}</span><span class="sb">] </span><span class="si">${</span><span class="nx">item</span><span class="p">.</span><span class="nx">name</span><span class="p">.</span><span class="nx">padEnd</span><span class="p">(</span><span class="mf">35</span><span class="p">)</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">item</span><span class="p">.</span><span class="nx">price</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">await</span><span class="w"> </span><span class="nx">getDistinctName</span><span class="p">(</span><span class="kc">undefined</span><span class="p">)</span><span class="w"> </span><span class="c1">//first call should not pass continuation token.</span>
+
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">getDistinctNames</span><span class="p">(</span><span class="nx">existingToken</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">CosmosClient</span><span class="p">(</span><span class="s2">&quot;YOUR_CONNECTION_STRING&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">container</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">client</span><span class="p">.</span><span class="nx">database</span><span class="p">(</span><span class="s2">&quot;YourDB&quot;</span><span class="p">).</span><span class="nx">container</span><span class="p">(</span><span class="s2">&quot;YourContainer&quot;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">querySpec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">query</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;SELECT DISTINCT c.name FROM c&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+
+<span class="w">  </span><span class="c1">// Define the options, passing the token if we have one</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">maxItemCount</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="p">,</span><span class="w"> </span><span class="c1">// Limit results per page</span>
+<span class="w">    </span><span class="nx">continuationToken</span><span class="o">:</span><span class="w"> </span><span class="nx">existingToken</span><span class="w"> </span>
+<span class="w">  </span><span class="p">};</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">queryIterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">container</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="nx">querySpec</span><span class="p">,</span><span class="w"> </span><span class="nx">options</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Fetch only the next &quot;page&quot; of results</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">resources</span><span class="o">:</span><span class="w"> </span><span class="nx">results</span><span class="p">,</span><span class="w"> </span><span class="nx">continuationToken</span><span class="o">:</span><span class="w"> </span><span class="nx">nextToken</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">queryIterator</span><span class="p">.</span><span class="nx">fetchNext</span><span class="p">();</span>
+
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Results:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">results</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">nextToken</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;More data available. Save this token for the next call:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">nextToken</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;No more results left.&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">results</span><span class="p">,</span><span class="w"> </span><span class="nx">nextToken</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="join-for-arrays">Join for arrays</h2>
+<ol>
+<li>A JOIN in Azure Cosmos DB for NoSQL is different from a JOIN in a relational database as its only scope is a single item. A JOIN creates a cross-product between different sections of a <strong>single item.</strong></li>
+<li>It is as if to not-flatten (opposite of VALUE) a value.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span>
+<span class="w">    </span><span class="n">p</span><span class="p">.</span><span class="n">id</span><span class="p">,</span>
+<span class="w">    </span><span class="n">p</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">tag</span>
+<span class="k">FROM</span><span class="w"> </span>
+<span class="w">    </span><span class="n">products</span><span class="w"> </span><span class="n">p</span>
+<span class="k">JOIN</span>
+<span class="w">    </span><span class="n">t</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">tags</span>
+
+<span class="cm">/*</span>
+<span class="cm"> {</span>
+<span class="cm">   id: &quot;0D3630F-B661-4FD6-A296-CD03BB7A4A0C&quot;,</span>
+<span class="cm">   name: &quot;Classic Vest, L&quot;,</span>
+<span class="cm">   tags: [</span>
+<span class="cm">     apparel,</span>
+<span class="cm">     worn,</span>
+<span class="cm">     no-damage</span>
+<span class="cm">   ]</span>
+<span class="cm"> }</span>
+<span class="cm">*/</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;80D3630F-B661-4FD6-A296-CD03BB7A4A0C&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Classic Vest, L&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tag&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;apparel&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;80D3630F-B661-4FD6-A296-CD03BB7A4A0C&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Classic Vest, L&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tag&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;worn&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;80D3630F-B661-4FD6-A296-CD03BB7A4A0C&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Classic Vest, L&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tag&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;no-damaged&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="o">//</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">VALUE</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">tags</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">t</span><span class="o">=</span><span class="s1">&#39;no-damage&#39;</span>
+
+<span class="k">SELECT</span><span class="w"> </span>
+<span class="w">    </span><span class="n">p</span><span class="p">.</span><span class="n">id</span><span class="p">,</span>
+<span class="w">    </span><span class="n">p</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">tag</span>
+<span class="k">FROM</span><span class="w"> </span>
+<span class="w">    </span><span class="n">products</span><span class="w"> </span><span class="n">p</span>
+<span class="k">JOIN</span>
+<span class="w">    </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">VALUE</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">tags</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">tag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;no-damage&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">t</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;80D3630F-B661-4FD6-A296-CD03BB7A4A0C&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Classic Vest, L&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tag&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;no-damaged&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div>
+<h2 id="alternative">Alternative</h2>
+<div class="highlight"><pre><span></span><code>SELECT 
+    p.id,
+    p.name
+FROM 
+    products p
+WHERE EXISTS (
+    SELECT VALUE t 
+    FROM t IN p.tags 
+    WHERE t.class != &#39;trade-in&#39;
+)
+</code></pre></div>
+<h2 id="using-array">Using ARRAY</h2>
+<ul>
+<li>this result only returns 1 record</li>
+<li>It is highly efficient as subquery compared with JOIN. As of 2026 this is the preferred way.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>SELECT 
+    p.id,
+    p.name,
+    ARRAY(SELECT VALUE t.name FROM t IN p.tags WHERE t.class != &#39;trade-in&#39;) AS filteredTags
+FROM 
+    products p
+</code></pre></div>
+<h3 id="nice-to-know">Nice to know</h3>
+<p>This query only returns class of trade-in but nothing of other tags
+<div class="highlight"><pre><span></span><code>SELECT p.id, p.name, l
+FROM p
+JOIN l IN c.tags
+WHERE l.class = &#39;trade-in&#39;
+</code></pre></div></p>
+<h2 id="parameters">Parameters</h2>
+<p>To avoid SQL injection, use parameters. It is also more efficient.</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">SqlQuerySpec</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;@azure/cosmos&quot;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">querySpec</span><span class="o">:</span><span class="w"> </span><span class="nx">SqlQuerySpec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">query</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;SELECT * FROM Families f WHERE f.lastName = @lastName&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">parameters</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;@lastName&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">value</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Wakefield&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">};</span>
+
+<span class="c1">// Example usage with a container</span>
+<span class="c1">// let response = await container.items.query(querySpec).fetchAll();</span>
+</code></pre></div>
+<p>Use query definition as of v3 (new way)
+<div class="highlight"><pre><span></span><code><span class="kt">string</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;SELECT p.name, t.name AS tag FROM products p JOIN t IN p.tags WHERE p.price &gt;= @lower AND p.price &lt;= @upper&quot;</span>
+<span class="n">QueryDefinition</span><span class="w"> </span><span class="n">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">WithParameter</span><span class="p">(</span><span class="s">&quot;@lower&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">WithParameter</span><span class="p">(</span><span class="s">&quot;@upper&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">);</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">FeedIterator</span><span class="o">&lt;</span><span class="kt">dynamic</span><span class="o">&gt;</span><span class="w"> </span><span class="n">feedIterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">container</span><span class="p">.</span><span class="n">GetItemQueryIterator</span><span class="o">&lt;</span><span class="kt">dynamic</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="w">    </span><span class="n">queryDefinition</span><span class="p">:</span><span class="w"> </span><span class="n">query</span><span class="p">,</span>
+<span class="w">    </span><span class="n">requestOptions</span><span class="p">:</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">QueryRequestOptions</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">MaxItemCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="p">}</span>
+<span class="p">);</span>
+</code></pre></div></p>
+<p>with SQLQuerySpec (old way)
+<div class="highlight"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">customerIds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="p">};</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">querySpec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SqlQuerySpec</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">QueryText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;select * from c where ARRAY_CONTAINS(@customerIds, c.customerId)&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Parameters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SqlParameterCollection</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">new</span><span class="w"> </span><span class="n">SqlParameter</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;@customerIds&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">customerIds</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="c1">// Example usage</span>
+<span class="c1">// IQueryable&lt;T&gt; queryable = client.CreateDocumentQuery&lt;T&gt;(collectionLink, querySpec);</span>
+</code></pre></div></p>
+<h2 id="troubleshooting-queries">Troubleshooting queries</h2>
+<p>To check long running queries/high consuming RUs
+1. DataPlaneRequest
+2. QueryRuntimeStatistics
+3. Enable full-text query diagnostics. </p>
+<div class="highlight"><pre><span></span><code>CDBDataPlaneRequests
+| where todouble(RequestCharge) &amp;gt; 10.0
+| project ActivityId, RequestCharge
+| join kind= inner (
+CDBQueryRuntimeStatistics
+| project ActivityId, QueryText
+) on $left.ActivityId == $right.ActivityId
+| order by RequestCharge desc
+| limit 100
+</code></pre></div>
+<p>Azure Cosmos DB provides advanced logging for detailed troubleshooting. By enabling full-text query, you're able to view the deobfuscated query for all requests within your Azure Cosmos DB account. You also give permission for Azure Cosmos DB to access and surface this data in your logs.</p>
+<p><img alt="Query Diagnostics" src="../img/query_diagnose.png" /></p>
+<h2 id="optimistic-direct-execution-ode">Optimistic Direct Execution (ODE)</h2>
+<p>https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/performance-tips-query-sdk?tabs=v3&amp;pivots=programming-language-csharp</p>
+<p>Take note on ODE (EnableOptimisticDirectExecution = true/false), setting true + partition key with maxconcurrency=1 will prevent fan-out meaning it only do a first match and return result.</p>
+<p><strong>NOTE on ODE</strong>:
+When you enable EnableOptimisticDirectExecution (true) in the SDK, the client optimistically bypasses this initial query plan request for certain queries (typically single-partition, simple streaming queries).</p>
+<p>Optimistic: The SDK assumes the query is simple and can be executed directly against a single partition.</p>
+<p>Direct Execution: The query is sent directly to the backend physical partition without first consulting the Gateway for a full query plan.</p>
+<p>Let's consider the query: <code style="font-family: &quot;Google Sans Text&quot;, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">SELECT * from r</code> (assuming 'r' is the alias for the document).</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Normal Query Execution (ODE Disabled)</th>
+<th>Query with EnableOptimisticDirectExecution = true</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Execution Steps</td>
+<td>1. Query Plan Request: SDK asks Gateway for a plan. 2. Actual Query: SDK executes the query based on the plan.</td>
+<td>1. Optimistic Query: SDK sends the query directly to the backend. 2. Fallback (if needed): If the direct execution fails (e.g., it's actually cross-partition), it transparently falls back to getting a query plan and executing normally.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="check-query-performance">Check Query performance</h2>
+<p>Use <code>MaxItemCount=0</code>and <code>PopulateIndexMetrics</code> on query to estimate explain plan Returns cost estimate without consuming full RU for execution. This execution does incur small RU charges as it doesn't return results, only execute Plan on how to run (against ODE principal)</p>
+<h2 id="aggregation-and-udf-are-much-efficient">Aggregation and UDF are much efficient</h2>
+<p>Aggregation is generally more efficient than UDFs. Given that if we have query like SELECT TOP 1 FROM c ORDER BY c.age, it's more efficient to run SELECT MIN(c.age) FROM c.</p>
+<p>Reason:
+1. ORDER is a full-scan on un-index field, but even on indexed field it need to sort.
+2. Return first and stop with index using min.</p>
+<h2 id="point-vs-query-read">Point vs Query Read</h2>
+<ul>
+<li>The difference is that point read if the document is 1kb, RU consumed is 1kb. While for Query if the query is 1kb it will consume est. 2.3RUs.</li>
+<li>It requires "id" + "partition key" for query.</li>
+<li>Command query</li>
+<li>ReadItemAsync - Requires both partition key &amp; ID</li>
+<li>ReadManyItemsAsync - better than IN statement and pass as List</li>
+<li>ReadItemStreamAsync - Does not deserialize</li>
+<li>GetItemQueryIterator - No ID and Partition Key required</li>
+<li>NOTE: id is always unique, which is why it's point read.</li>
+</ul>
+<p>Point read uses partitionkey during query(still considered query) and is consumes less RUs.
+<div class="highlight"><pre><span></span><code><span class="kt">string</span><span class="w"> </span><span class="n">categoryId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;26C74104-40BC-4541-8EF5-9892F7F03D72&quot;</span><span class="p">;</span>
+<span class="n">PartitionKey</span><span class="w"> </span><span class="n">partitionKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="p">(</span><span class="n">categoryId</span><span class="p">);</span>
+
+<span class="n">Product</span><span class="w"> </span><span class="n">saddle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">container</span><span class="p">.</span><span class="n">ReadItemAsync</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">partitionKey</span><span class="p">);</span>
+
+<span class="n">List</span><span class="o">&lt;</span><span class="p">(</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="n">PartitionKey</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">itemsToFind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="p">(</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="n">PartitionKey</span><span class="p">)</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="p">(</span><span class="s">&quot;P1&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PartitionKey</span><span class="p">(</span><span class="s">&quot;T1&quot;</span><span class="p">)),</span>
+<span class="w">    </span><span class="p">(</span><span class="s">&quot;P2&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PartitionKey</span><span class="p">(</span><span class="s">&quot;T1&quot;</span><span class="p">)),</span>
+<span class="w">    </span><span class="p">(</span><span class="s">&quot;P3&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PartitionKey</span><span class="p">(</span><span class="s">&quot;T2&quot;</span><span class="p">))</span><span class="w"> </span><span class="c1">// Can even be from different partitions!</span>
+<span class="p">};</span>
+<span class="n">FeedResponse</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">container</span><span class="p">.</span><span class="n">ReadManyItemsAsync</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span><span class="p">(</span><span class="n">itemsToFind</span><span class="p">);</span>
+</code></pre></div></p>
+<p>Query without partition key
+<div class="highlight"><pre><span></span><code><span class="kt">string</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;SELECT * FROM c WHERE c.status = &#39;pending&#39;&quot;</span><span class="p">;</span>
+<span class="n">QueryDefinition</span><span class="w"> </span><span class="n">queryDefinition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">QueryDefinition</span><span class="p">(</span><span class="n">sql</span><span class="p">);</span>
+
+<span class="c1">// 2. Initialize the iterator </span>
+<span class="c1">// Notice we DO NOT set the PartitionKey in QueryRequestOptions</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">FeedIterator</span><span class="o">&lt;</span><span class="n">MyItem</span><span class="o">&gt;</span><span class="w"> </span><span class="n">feedIterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">container</span><span class="p">.</span><span class="n">GetItemQueryIterator</span><span class="o">&lt;</span><span class="n">MyItem</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="w">    </span><span class="n">queryDefinition</span><span class="p">,</span>
+<span class="c1">//partitionKey: new PartitionKey(&quot;xyxyx&quot;) // For efficiency.</span>
+<span class="w">    </span><span class="n">requestOptions</span><span class="p">:</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">QueryRequestOptions</span><span class="w"> </span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span>
+<span class="w">        </span><span class="n">MaxItemCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="c1">// Optional: limit results per page</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">);</span>
+</code></pre></div></p>
+<h2 id="headers-for-query">Headers for Query</h2>
+<p>These headers are returned for query response.</p>
+<table>
+<thead>
+<tr>
+<th>Header Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x-ms-continuation</td>
+<td>The actual string (the token) you need to send back.</td>
+</tr>
+<tr>
+<td>x-ms-item-count</td>
+<td>How many items were actually returned in this batch.</td>
+</tr>
+<tr>
+<td>x-ms-request-charge</td>
+<td>The RU cost for just this specific page of the query.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="compute-properties">Compute Properties</h2>
+<p>https://learn.microsoft.com/en-us/cosmos-db/query/computed-properties?tabs=dotnet</p>
+<p>It's similar to User defined function, with limitation of:
+- Queries must specify a FROM clause that represents the root item reference. Examples of supported FROM clauses are: FROM c, FROM root c, and FROM MyContainer c.
+- Queries must use a VALUE clause in the projection.
+- Queries can't include a JOIN.
+- Queries can't use nondeterministic Scalar expressions. Examples of nondeterministic scalar expressions are: GetCurrentDateTime, GetCurrentTimeStamp, GetCurrentTicks, and RAND.
+- Queries can't use any of the following clauses: WHERE, GROUP BY, ORDER BY, TOP, DISTINCT, OFFSET LIMIT, EXISTS, ALL, LAST, FIRST, and NONE.
+- Queries can't include a scalar subquery.
+- Aggregate functions, spatial functions, nondeterministic functions, and user defined functions (UDFs) aren't supported.</p>
+<p>Example, declare it
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;cp_20PercentDiscount&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">  </span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SELECT VALUE (c.price * 0.2) FROM c&quot;</span><span class="w"> </span>
+<span class="p">}</span><span class="w"> </span>
+</code></pre></div></p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span>
+<span class="w">    </span><span class="k">c</span><span class="p">.</span><span class="n">price</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">cp_20PercentDiscount</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">discountedPrice</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="w"> </span>
+<span class="k">FROM</span><span class="w"> </span>
+<span class="w">    </span><span class="k">c</span><span class="w"> </span>
+<span class="k">WHERE</span><span class="w"> </span>
+<span class="w">    </span><span class="k">c</span><span class="p">.</span><span class="n">cp_20PercentDiscount</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">50</span><span class="p">.</span><span class="mi">00</span>
+</code></pre></div>
+<h2 id="subqueries-performance">Subqueries performance</h2>
+<p>https://learn.microsoft.com/en-us/cosmos-db/query/subquery#exists-expression</p>
+<p>This will generate many objects and will consume many RUs, since the filtering is performed after combining the objects in the JOIN.
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">p</span><span class="p">.</span><span class="n">title</span><span class="p">,</span>
+<span class="w">    </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">author</span>
+<span class="k">FROM</span>
+<span class="w">    </span><span class="n">books</span><span class="w"> </span><span class="n">b</span>
+<span class="k">JOIN</span>
+<span class="w">    </span><span class="n">a</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">authors</span>
+<span class="k">WHERE</span>
+<span class="w">    </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;John Smith&quot;</span>
+</code></pre></div></p>
+<p>Instead, using EXISTS in a subquery will perform the filter before the JOIN, which will reduce the amount of data, reducing consumption.</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">b</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+<span class="w">    </span><span class="k">EXISTS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">VALUE</span>
+<span class="w">        </span><span class="n">a</span>
+<span class="w">    </span><span class="k">FROM</span>
+<span class="w">        </span><span class="n">a</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="w"> </span><span class="n">authors</span>
+<span class="w">    </span><span class="k">WHERE</span>
+<span class="w">        </span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot; John Smith &quot;</span><span class="p">)</span>
+<span class="k">FROM</span>
+<span class="w">    </span><span class="n">books</span><span class="w"> </span><span class="n">b</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

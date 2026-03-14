@@ -1,0 +1,2400 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Han">
+      
+      
+        <link rel="canonical" href="https://yoonghan.github.io/Azure-Cosmos-DB-DP-420/26.%20DeveloperTools/">
+      
+      
+        <link rel="prev" href="../25.%20CLI%20Command/">
+      
+      
+        <link rel="next" href="../27.%20Stored%20Procedure/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>Developer Tools - Azure Cosmos DB (DP-420) Study Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#developer-tools" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-header__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Azure Cosmos DB (DP-420) Study Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Developer Tools
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../2.%20Overview/" class="md-tabs__link">
+          
+  
+  
+  Topics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../1.%20Exam_Preparation/Notes/" class="md-tabs__link">
+          
+  
+  
+  Exam
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-nav__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Azure Cosmos DB (DP-420) Study Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.%20Overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%20Replication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20Conflict_Handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.%20Analytics_Connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Azure Analytics Connectivity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.%20CosmosDB_Emulator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emulator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.%20CosmosDB_Roles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.%20InnerWorks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Innerworks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.%20Integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.%20Designing%20Database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Designing Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.%20SDK%20Errors%20Codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDK Error Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12.%20Batch%20Transaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Batch Transaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13.%20Bulk%20Execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bulk Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14.%20Queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Queries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15.%20Indexing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Indexing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16.%20Time%20To%20Live/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time To Live (TTL)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17.%20Partition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Partition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18.%20Request%20Unit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Request Unit (RU)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19.%20Gateway%20Mode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gateway Mode
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20.%20Rest%20API/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rest API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21.%20Security%20and%20Encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security And Encryption
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../22.%20Backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../23.%20Consistency/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consistency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../24.%20Change%20Feed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Change Feed
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../25.%20CLI%20Command/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Tools
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#using-template-bicep-arm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using template - Bicep / ARM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using template - Bicep / ARM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arm-json-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ARM JSON Template
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDK
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SDK">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sdk-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDK Code
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#food-for-thought" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Food for thought.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnose-response-of-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnose Response of SDK
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best practices
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sdk-connections-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDK Connections Settings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sdk-update-and-delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDK Update and delete
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SDK Update and delete">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-delete-requires-a-partition-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Delete requires a partition key
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-update-sample-requires-a-partition-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Update sample requires a partition key
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-delete-all-by-partition-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Delete all by partition key
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-optimistic-concurrency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Optimistic concurrency
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-partial-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Partial update
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-log-into-custom-handler-for-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding Log into Custom Handler for SDK
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-bicep-arm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using Bicep / ARM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using Bicep / ARM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#commands-on-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Commands on CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../27.%20Stored%20Procedure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stored Procedures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../28.%20UDF%20and%20Triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UDF and Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../29.%20Features%20And%20Implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature and Implementations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../30.%20Vector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../31.%20Cognitive%20Search/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cognitive Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../32.%20Troubleshooting%20And%20Monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monitoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../33.%20Authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../34.%20Migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Exam
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Lab_Exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hands-on Labs Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#using-template-bicep-arm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using template - Bicep / ARM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using template - Bicep / ARM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arm-json-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ARM JSON Template
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDK
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SDK">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sdk-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDK Code
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#food-for-thought" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Food for thought.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnose-response-of-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnose Response of SDK
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best practices
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sdk-connections-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDK Connections Settings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sdk-update-and-delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SDK Update and delete
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SDK Update and delete">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-delete-requires-a-partition-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Delete requires a partition key
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-update-sample-requires-a-partition-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Update sample requires a partition key
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-delete-all-by-partition-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Delete all by partition key
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-optimistic-concurrency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Optimistic concurrency
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-partial-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Partial update
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-log-into-custom-handler-for-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding Log into Custom Handler for SDK
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-bicep-arm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using Bicep / ARM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using Bicep / ARM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#commands-on-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Commands on CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="developer-tools">Developer Tools</h1>
+<h2 id="using-template-bicep-arm">Using template - Bicep / ARM</h2>
+<p><img alt="Arm Template" src="../img/cli_command_arm.png" /></p>
+<p>https://learn.microsoft.com/en-us/training/modules/create-resource-template-for-azure-cosmos-db-sql-api/7-exercise-create-container-using-azure-resource-manager-templates</p>
+<div class="highlight"><pre><span></span><code>az deployment group create --resource-group &#39;&lt;resource-group&gt;&#39; --template-file &#39;.\template.json|bicep&#39; --name &#39;jsontemplatedeploy&#39;
+</code></pre></div>
+<p><strong>Throughput cannot be updated</strong> by using templates. Since the process is running inside a pipeline, using the Azure portal is not an option and have to use CLI. (This is NO LONGER TRUE)</p>
+<p>But: The limitation applies only to migrating between Manual and Autoscale provisioning. Templating cannot do this as the 2 have different formatting. You can change the containerThroughput value all day long to scale it. But if you tried to swap this definition for an autoscaleSettings block, the deployment would fail because the underlying Azure Resource Manager API does not support that schema switch via the simple PUT operation that Bicep performs during deployment.</p>
+<h3 id="summary">Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Tool Type</th>
+<th>Manual ↔ Autoscale Migration</th>
+<th>Scaling (within the same mode)</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Azure Portal</td>
+<td>Supported</td>
+<td>Supported</td>
+<td>Uses dedicated API action (POST or migrate).</td>
+</tr>
+<tr>
+<td>Azure CLI / PowerShell</td>
+<td>Supported</td>
+<td>Supported</td>
+<td>Uses dedicated cmdlets/commands to call the migration API.</td>
+</tr>
+<tr>
+<td>Bicep / ARM Templates</td>
+<td>Not Supported</td>
+<td>Supported</td>
+<td>Only designed for declarative updates (PUT); does not handle the specialized POST migration action.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="arm-json-template">ARM JSON Template</h3>
+<p>Take note the naming of the resource is <code>csmsamr-&lt;resource-group-id&gt;/cosmicworks/products</code>
+Take note of ARM template throughput, if manual you don't have a subset.
+- properties.options.throughput
+- properties.options.autoscaleSettings.maxThroughput</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;$schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;contentVersion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0.0&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;resources&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Microsoft.DocumentDB/databaseAccounts&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;apiVersion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-04-15&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;[concat(&#39;csmsarm&#39;, uniqueString(resourceGroup().id))]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;[resourceGroup().location]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;databaseAccountOfferType&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Standard&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;locations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;locationName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;westus&quot;</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Microsoft.DocumentDB/databaseAccounts/sqlDatabases&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;apiVersion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-04-15&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;[concat(&#39;csmsarm&#39;, uniqueString(resourceGroup().id), &#39;/cosmicworks&#39;)]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;dependsOn&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;[resourceId(&#39;Microsoft.DocumentDB/databaseAccounts&#39;, concat(&#39;csmsarm&#39;, uniqueString(resourceGroup().id)))]&quot;</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;resource&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;cosmicworks&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;apiVersion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2021-05-15&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;[concat(&#39;csmsarm&#39;, uniqueString(resourceGroup().id), &#39;/cosmicworks/products&#39;)]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;dependsOn&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;[resourceId(&#39;Microsoft.DocumentDB/databaseAccounts&#39;, concat(&#39;csmsarm&#39;, uniqueString(resourceGroup().id)))]&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;[resourceId(&#39;Microsoft.DocumentDB/databaseAccounts/sqlDatabases&#39;, concat(&#39;csmsarm&#39;, uniqueString(resourceGroup().id)), &#39;cosmicworks&#39;)]&quot;</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;resource&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;products&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;partitionKey&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;paths&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">              </span><span class="s2">&quot;/categoryId&quot;</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">&quot;indexingPolicy&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;indexingMode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;consistent&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;automatic&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;includedPaths&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">              </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/price/*&quot;</span>
+<span class="w">              </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;excludedPaths&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">              </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/*&quot;</span>
+<span class="w">              </span><span class="p">}</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">&quot;options&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;autoscaleSettings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;maxThroughput&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="sdk">SDK</h2>
+<p>https://learn.microsoft.com/en-us/training/modules/use-azure-cosmos-db-sql-api-sdk/4-connect-to-online-account?pivots=csharp</p>
+<ul>
+<li>Only CosmosClient has keyword cosmos, the rest of the classes uses Container, Database etc.</li>
+<li>CosmosClient has a 3-argument constructor <code>new CosmosClient(accountEndpoint, credential, cosmosoption);</code></li>
+<li>Coding practices</li>
+<li>Use promise instead of code block <code>await client.CreateDatabaseIfNotExistsAsync("cosmicworks");</code> ~<code>client.CreateDatabaseIfNotExistsAsync("cosmicworks").Result;</code>~</li>
+<li>Use iterator instead of LINQ, <code>container.GetItemLinqQueryable&lt;T&gt;().Where(i =&gt; i.categoryId == 2).ToFeedIterator&lt;T&gt;();</code> ~<code>container.GetItemLinqQueryable&lt;T&gt;().Where(i =&gt; i.categoryId == 2).ToList&lt;T&gt;();</code>~</li>
+<li>Use <em>MaxItemCount</em>, with -1 being all - make sure it cannot be &gt; 4MB. Use as max result set in query.</li>
+<li>Use <em>MaxConcurrency</em>, with -1 being handled by SDK. Use as number of concurrent operations ran client side during parallel query execution.</li>
+<li>Use <em>MaxBufferItemCount</em>, with -1 being handled by SDK. Use as maximum number of items that are buffered client-side during a parallel query execution.</li>
+</ul>
+<h3 id="sdk-code">SDK Code</h3>
+<p><code>CosmosClient</code> = used for connectivity or manage database (control plane)</p>
+<p>The other classes use in SDK, </p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Purpose</th>
+<th>Examples of Methods</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Container</td>
+<td>Used to perform operations on a specific container, including item (document) operations and querying. It is obtained from the CosmosClient via the Database object.</td>
+<td>CreateItemAsync, ReadItemAsync, UpsertItemAsync, DeleteItemAsync, GetItemQueryIterator</td>
+</tr>
+<tr>
+<td>ItemRequestOptions</td>
+<td>A class that allows you to specify additional options for item operations, such as optimistic concurrency via ETag checks.</td>
+<td>N/A (It's a configuration object)</td>
+</tr>
+<tr>
+<td>QueryDefinition</td>
+<td>Used to define the SQL query text and optionally provide parameterized values.</td>
+<td>N/A (It's a definition object)</td>
+</tr>
+<tr>
+<td>FeedIterator<T></td>
+<td>The object used to asynchronously retrieve results from a query (like a cursor or enumerator).</td>
+<td>HasMoreResults, ReadNextAsync</td>
+</tr>
+</tbody>
+</table>
+<h3 id="food-for-thought">Food for thought.</h3>
+<p>You plan to use an Azure DevOps pipeline to deploy multiple Azure Cosmos DB for NoSQL databases and implement custom role-based access control (RBAC) roles for authorization.</p>
+<p>Scenario:
+After the deployment, you need to temporarily update the throughput to support a data migration process that requires increased performance.</p>
+<p>Requirement:
+You must determine the most efficient and flexible method to update the throughput dynamically.</p>
+<p>This scenario: CLI is better suited as it's faster while using ARM/Bicep requires a full resource reconfiguration which is a bad approach (e.g. deploy every thing with 1000 throughput, then redeploy with 400 throughput but it needs to re-iterate everything).</p>
+<h3 id="classes">Classes</h3>
+<p>Useful classes for SDK</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Microsoft.Azure.Cosmos.CosmosClient</td>
+<td>Client-side logical representation of an Azure Cosmos DB account and the primary class used for the SDK</td>
+</tr>
+<tr>
+<td>Microsoft.Azure.Cosmos.Database</td>
+<td>Logically represents a database client-side and includes common operations for database management</td>
+</tr>
+<tr>
+<td>Microsoft.Azure.Cosmos.Container</td>
+<td>Logically represents a container client-side and includes common operations for container management</td>
+</tr>
+</tbody>
+</table>
+<h3 id="diagnose-response-of-sdk">Diagnose Response of SDK</h3>
+<p>All the responses in the SDK, including CosmosException, have a Diagnostics property. This property records all the information related to the single request, including if there were retries or any transient failures.</p>
+<div class="highlight"><pre><span></span><code><span class="k">try</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">ItemResponse</span><span class="o">&lt;</span><span class="n">Book</span><span class="o">&gt;</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="n">Container</span><span class="p">.</span><span class="n">CreateItemAsync</span><span class="o">&lt;</span><span class="n">Book</span><span class="o">&gt;</span><span class="p">(</span><span class="n">item</span><span class="p">:</span><span class="w"> </span><span class="n">testItem</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Diagnostics</span><span class="p">.</span><span class="n">GetClientElapsedTime</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">ConfigurableSlowRequestTimeSpan</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Log the response.Diagnostics.ToString() and add any additional info necessary to correlate to other logs </span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">CosmosException</span><span class="w"> </span><span class="n">cosmosException</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="c1">// Log the full exception including the stack trace with: cosmosException.ToString()</span>
+
+<span class="w">    </span><span class="c1">// The Diagnostics can be logged separately if required with: cosmosException.Diagnostics.ToString()</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="best-practices">Best practices</h3>
+<ol>
+<li>Use stream not LINQ. Meaning no .toList(), but toFeedIterator()</li>
+<li>Patching often save more than Replace. But from documentation it says there are no significant difference, as before patching it queries first before replacing.</li>
+<li>Limit per record is 2MB for NoSQL, for MongoDB is 16MB. Not sure for table, Gremlin and Cassandra.</li>
+</ol>
+<h3 id="sdk-connections-settings">SDK Connections Settings</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+<th>Default Value</th>
+<th>Recommended Setting for High Load</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MaxRequestsPerTcpConnection</td>
+<td>The number of requests allowed simultaneously over a single TCP connection. When this limit is reached, the SDK opens new connections.</td>
+<td>30</td>
+<td>8–16 (for high-concurrency, latency-sensitive apps)</td>
+</tr>
+<tr>
+<td>MaxTcpConnectionsPerEndpoint</td>
+<td>The maximum number of TCP connections that may be opened to a single backend replica/endpoint.</td>
+<td>Unlimited (in .NET) / 130 (in Java)</td>
+<td>$\geq$ 16</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code>QueryRequestOptions options = new ()
+{
+    MaxItemCount = 500,
+    MaxConcurrency = 5,
+    MaxBufferedItemCount = 5000
+};
+
+
+### SDK Logging
+
+Created using with **RequestHandler** and add AddCustomHandlers(new LogHandler());
+
+```c#
+public class LogHandler : RequestHandler
+{    
+    public override async Task&lt;ResponseMessage&gt; SendAsync(RequestMessage request, CancellationToken cancellationToken)
+    {
+        Console.WriteLine($&quot;[{request.Method.Method}]\t{request.RequestUri}&quot;);
+
+        ResponseMessage response = await base.SendAsync(request, cancellationToken);
+        return response;
+    }
+}
+
+CosmosClientBuilder builder = new CosmosClientBuilder()
+    .endpoint(&quot;&lt;your-cosmos-endpoint&gt;&quot;)
+    .credential(managedIdentityCredential)
+    .consistencyLevel(ConsistencyLevel.EVENTUAL);
+
+builder.AddCustomHandlers(new LogHandler());
+
+CosmosClient client = builder.Build();
+</code></pre></div>
+<h3 id="sdk-update-and-delete">SDK Update and delete</h3>
+<p>There are 3 types of patch/replace/upsert
+- <strong>PatchItemAsync</strong> as your default for updates. It saves bandwidth and RUs, and prevents "clobbering" data if two users update different fields at the same time. Slightly lower RU consumption due to sending less data.
+- <strong>ReplaceItemAsync</strong> if you are using Optimistic Concurrency (ETags). While Patch supports it too, Replace is the traditional way to ensure "I am overwriting exactly what I last read.". High RU.
+- <strong>UpsertItemAsync</strong> only when you are truly unsure if the data is already there. If you know you are creating a new record, CreateItemAsync is cheaper. Highest RU include query.</p>
+<p><strong>NOTE</strong>: Both requires a partition key.</p>
+<h4 id="1-delete-requires-a-partition-key">1. Delete requires a partition key</h4>
+<div class="highlight"><pre><span></span><code><span class="kt">string</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;027D0B9A-F9D9-4C96-8213-C8546C4AAE71&quot;</span><span class="p">;</span>
+<span class="kt">string</span><span class="w"> </span><span class="n">categoryId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;26C74104-40BC-4541-8EF5-9892F7F03D72&quot;</span><span class="p">;</span>
+<span class="n">PartitionKey</span><span class="w"> </span><span class="n">partitionKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="p">(</span><span class="n">categoryId</span><span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="n">container</span><span class="p">.</span><span class="n">DeleteItemAsync</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">partitionKey</span><span class="p">);</span>
+</code></pre></div>
+<h4 id="2-update-sample-requires-a-partition-key">2. Update sample requires a partition key</h4>
+<div class="highlight"><pre><span></span><code><span class="p">...</span>
+<span class="n">saddle</span><span class="p">.</span><span class="n">price</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">35.00d</span><span class="p">;</span>
+<span class="k">await</span><span class="w"> </span><span class="n">container</span><span class="p">.</span><span class="n">ReplaceItemAsync</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span><span class="p">(</span><span class="n">saddle</span><span class="p">);</span>
+</code></pre></div>
+<h4 id="3-delete-all-by-partition-key">3. Delete all by partition key</h4>
+<p>This is disabled by default and require Azure support. It's efficient and run in background.
+<div class="highlight"><pre><span></span><code>await container.DeleteAllItemsByPartitionKeyStreamAsync(partitionKey);
+</code></pre></div></p>
+<h4 id="4-optimistic-concurrency">4. Optimistic concurrency</h4>
+<p>IAzure Cosmos DB provides optimistic concurrency control (OCC) using ETags, which is a built-in feature across all its SDKs. </p>
+<div class="highlight"><pre><span></span><code><span class="n">ItemRequestOptions</span><span class="w"> </span><span class="n">requestOptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ItemRequestOptions</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">IfMatchEtag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">etag</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="c1">// 4. Attempt to replace the item</span>
+<span class="w">        </span><span class="n">ItemResponse</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span><span class="w"> </span><span class="n">replaceResponse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">container</span><span class="p">.</span><span class="n">ReplaceItemAsync</span><span class="p">(</span>
+<span class="w">            </span><span class="n">itemToUpdate</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="n">id</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="nf">PartitionKey</span><span class="p">(</span><span class="n">partitionKey</span><span class="p">),</span><span class="w"> </span>
+<span class="w">            </span><span class="n">requestOptions</span>
+<span class="w">        </span><span class="p">);</span>
+</code></pre></div>
+<h3 id="5-partial-update">5. Partial update</h3>
+<p>A single query with patch of different updates. Need to use patch. See that patch have different methods
+<div class="highlight"><pre><span></span><code>List&lt;PatchOperation&gt; operations = new List&lt;PatchOperation&gt;()
+{
+    PatchOperation.Add(&quot;/status&quot;, &quot;processed&quot;),
+    PatchOperation.Replace(&quot;/lastModified&quot;, DateTime.UtcNow),
+    PatchOperation.Increment(&quot;/orderCount&quot;, 1)
+};
+
+// 3. Execute the Patch (Notice both ID and PartitionKey are required)
+ItemResponse&lt;dynamic&gt; response = await container.PatchItemAsync&lt;dynamic&gt;(
+    id: itemId,
+    partitionKey: new PartitionKey(deviceType),
+    patchOperations: operations
+);
+</code></pre></div></p>
+<h2 id="adding-log-into-custom-handler-for-sdk">Adding Log into Custom Handler for SDK</h2>
+<p>How to override an SDK, it's to add or override via RequestHandler.</p>
+<div class="highlight"><pre><span></span><code><span class="n">builder</span><span class="p">.</span><span class="n">AddCustomHandlers</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">LogHandler</span><span class="p">());</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">LogHandler</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">RequestHandler</span>
+<span class="p">{</span><span class="w">    </span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="n">ResponseMessage</span><span class="o">&gt;</span><span class="w"> </span><span class="n">SendAsync</span><span class="p">(</span><span class="n">RequestMessage</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">CancellationToken</span><span class="w"> </span><span class="n">cancellationToken</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;[{request.Method.Method}]\t{request.RequestUri}&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">ResponseMessage</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">base</span><span class="p">.</span><span class="n">SendAsync</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">cancellationToken</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;[{Convert.ToInt32(response.StatusCode)}]\t{response.StatusCode}&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">response</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="using-bicep-arm">Using Bicep / ARM</h2>
+<p>To use just take note of keywords
+- dependsOn
+- parent
+https://learn.microsoft.com/en-sg/training/modules/create-resource-template-for-azure-cosmos-db-sql-api/4-configure-database-container-resources
+- name is tricky, in template you define only the name. But if you have resource to update e.g. the indexPolicy you need to set to the properties.resource.indexingPolicy property of the "databaseAccounts/sqlDatabases/containers". I.e.   "name": "[concat('csmsarm', uniqueString(resourceGroup().id), '/cosmicworks/products')]",
+https://learn.microsoft.com/en-sg/training/modules/create-resource-template-for-azure-cosmos-db-sql-api/6-manage-index-policies</p>
+<h3 id="commands-on-cli">Commands on CLI</h3>
+<p>Remember there is only "Create", wether you create or update it is just create.</p>
+<div class="highlight"><pre><span></span><code>az<span class="w"> </span>deployment<span class="w"> </span>group<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--resource-group<span class="w"> </span><span class="s1">&#39;&lt;resource-group&gt;&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--template-file<span class="w"> </span><span class="s1">&#39;.\template.json&#39;</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

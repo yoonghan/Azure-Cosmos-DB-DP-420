@@ -1,0 +1,2809 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Han">
+      
+      
+        <link rel="canonical" href="https://yoonghan.github.io/Azure-Cosmos-DB-DP-420/15.%20Indexing/">
+      
+      
+        <link rel="prev" href="../14.%20Queries/">
+      
+      
+        <link rel="next" href="../16.%20Time%20To%20Live/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>Indexing - Azure Cosmos DB (DP-420) Study Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#indexing" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-header__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Azure Cosmos DB (DP-420) Study Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Indexing
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="azure" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../2.%20Overview/" class="md-tabs__link">
+          
+  
+  
+  Topics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../1.%20Exam_Preparation/Notes/" class="md-tabs__link">
+          
+  
+  
+  Exam
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Azure Cosmos DB (DP-420) Study Guide" class="md-nav__button md-logo" aria-label="Azure Cosmos DB (DP-420) Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Azure Cosmos DB (DP-420) Study Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.%20Overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%20Replication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20Conflict_Handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.%20Analytics_Connectivity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Azure Analytics Connectivity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.%20CosmosDB_Emulator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emulator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7.%20CosmosDB_Roles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.%20InnerWorks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Innerworks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.%20Integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.%20Designing%20Database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Designing Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.%20SDK%20Errors%20Codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDK Error Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12.%20Batch%20Transaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Batch Transaction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13.%20Bulk%20Execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bulk Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14.%20Queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Queries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Indexing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Indexing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#indexing-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexing Paths
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Indexing Paths">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#precedence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Precedence
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indexing-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexing Mode
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Indexing Mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#note" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Note
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#composite-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composite index
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Composite index">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#composite-index-ordering-and-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composite Index Ordering and Search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mixing-composite-index-sort-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mixing composite index sort order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mix-order-of-2-eg-age-asc-name-desc-gender-asc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mix order of &gt; 2. E.g. age ASC, name DESC, gender ASC.
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indexing-with-order-by" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexing with ORDER BY
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scanning-methods-due-to-indexingpartition-keyid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scanning methods due to indexing/partition key/id
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debugging Index
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unique-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unique Key
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partition-and-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition and Index
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#full-text-of-hybrid-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full-text of Hybrid search
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#difference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Difference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tuple-indexing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tuple Indexing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-indexes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding indexes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indexing-importance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexing Importance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lazy-mode-deprecated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lazy mode (Deprecated)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spatial-indexing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spatial Indexing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indexing-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexing issues.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-of-indexes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type of indexes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#to-digest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        To digest.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#check-index-progress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check Index progress
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partition-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition key
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#force-query-on-non-indexed-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Force query on non-indexed path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#few-more-indexing-tricks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Few more indexing tricks
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16.%20Time%20To%20Live/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time To Live (TTL)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17.%20Partition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Partition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18.%20Request%20Unit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Request Unit (RU)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19.%20Gateway%20Mode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gateway Mode
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20.%20Rest%20API/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rest API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21.%20Security%20and%20Encryption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security And Encryption
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../22.%20Backup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../23.%20Consistency/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Consistency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../24.%20Change%20Feed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Change Feed
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../25.%20CLI%20Command/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../26.%20DeveloperTools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../27.%20Stored%20Procedure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stored Procedures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../28.%20UDF%20and%20Triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UDF and Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../29.%20Features%20And%20Implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature and Implementations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../30.%20Vector/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vector
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../31.%20Cognitive%20Search/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cognitive Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../32.%20Troubleshooting%20And%20Monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monitoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../33.%20Authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../34.%20Migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DB Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Exam
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exam Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Exam_Preparation/Lab_Exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hands-on Labs Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#indexing-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexing Paths
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Indexing Paths">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#precedence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Precedence
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indexing-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexing Mode
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Indexing Mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#note" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Note
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#composite-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composite index
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Composite index">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#composite-index-ordering-and-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composite Index Ordering and Search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mixing-composite-index-sort-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mixing composite index sort order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mix-order-of-2-eg-age-asc-name-desc-gender-asc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mix order of &gt; 2. E.g. age ASC, name DESC, gender ASC.
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indexing-with-order-by" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexing with ORDER BY
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scanning-methods-due-to-indexingpartition-keyid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scanning methods due to indexing/partition key/id
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debugging Index
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unique-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unique Key
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partition-and-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition and Index
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#full-text-of-hybrid-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full-text of Hybrid search
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#difference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Difference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tuple-indexing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tuple Indexing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-indexes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding indexes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indexing-importance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexing Importance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lazy-mode-deprecated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lazy mode (Deprecated)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spatial-indexing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spatial Indexing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indexing-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexing issues.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-of-indexes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type of indexes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#to-digest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        To digest.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#check-index-progress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check Index progress
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#partition-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition key
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#force-query-on-non-indexed-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Force query on non-indexed path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#few-more-indexing-tricks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Few more indexing tricks
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="indexing">Indexing</h1>
+<p>Some simple notes:</p>
+<ul>
+<li>Default includePaths is *, meaning all paths are indexed.</li>
+<li>Default only _etag is in excludePaths from index. If override e.g. excludePaths: "/name/?", then _etag will start to be included hence need to be explicitly stated.</li>
+<li>Default _ts is excluded and it's invisible. Hence even if you want to override you can't.</li>
+</ul>
+<p>Just some sample how it search:
+https://learn.microsoft.com/en-us/azure/cosmos-db/index-overview</p>
+<h2 id="indexing-paths">Indexing Paths</h2>
+<p>This is accessible under index tab of settings. All indexPath (except compositeIndex) <strong>MUST</strong> end either with wildcard or scalar(?) value else it is invalid.</p>
+<p>Indexing is important as it changes the:</p>
+<ul>
+<li>speed</li>
+<li>and RU used</li>
+</ul>
+<p>Three primary operators are used when defining a property path:</p>
+<ul>
+<li>The ? operator indicates that a path terminates with a string or number (scalar) value</li>
+<li>The [] operator indicates that this path includes an array and avoids having to specify an array index value</li>
+<li>The * operator is a wildcard and matches any element <strong>beyond</strong> the current path</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Path expression</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/*</td>
+<td>All properties</td>
+</tr>
+<tr>
+<td>/name/?</td>
+<td>The scalar value of the name property. This does not include sub jsons or values after /name only fields.</td>
+</tr>
+<tr>
+<td>/category/*</td>
+<td>All properties under the category property, meaning /category/cat/price etc is included</td>
+</tr>
+<tr>
+<td>/metadata/sku/?</td>
+<td>The scalar value of the metadata.sku property</td>
+</tr>
+<tr>
+<td>/tags/[]/name/?</td>
+<td>Within the tags array, the scalar values of all possible name properties</td>
+</tr>
+</tbody>
+</table>
+<h3 id="precedence">Precedence</h3>
+<p>If both exclude and include clash, e.g. include is /food/ingredients/nutrition/<em> and exclude is /food/ingredients/</em> , then include takes precedence as it is better matched. /? is also higher than /* . Note: System have a check if both exclude and include has the same value.</p>
+<h2 id="indexing-mode">Indexing Mode</h2>
+<p>2 Types of indexing mode:
+- None
+Useful if write heavy and only relies on _id and partitionKey
+- Consistent
+ 1. Consistent means will index while create/upsert/delete, while none doesn't. Good if there are no search or index needed on none, so opt for none first when executing a bulk.
+ 2. id and _ts is always indexed for NoSQL and this cannot be disabled (nor does it show in indexing)</p>
+<p>Automatic
+- true
+- false
+Documents are not indexed automatically. <strong>HOWEVER</strong> —and this is the key difference—the indexing engine is still "On."
+Result: You can choose to index specific documents manually. In the NoSQL SDKs, you can send a special header (<code>x-ms-indexing-directive: include</code>) with a write request to index only that specific document.</p>
+<p>Both are dependent</p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>automatic: false</th>
+<th>indexingMode: Consistent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. User inserts a new document.</td>
+<td>Index is NOT created for the document.</td>
+<td>The Consistent mode's rule to update the index is never triggered because the document was blocked from being indexed by automatic: false.</td>
+</tr>
+<tr>
+<td>2. User immediately runs a query for the new document.</td>
+<td>The query will likely miss the document or result in a high-RU scan, as it is not in the index.</td>
+<td> </td>
+</tr>
+</tbody>
+</table>
+<h3 id="note">Note</h3>
+<p>Mongo version is always Consistent.</p>
+<h2 id="composite-index">Composite index</h2>
+<p>Unlike indexPaths or excludePath, it <strong>must not</strong> end with /? or wildcard.</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">ASC</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">price</span><span class="w"> </span><span class="k">ASC</span>
+</code></pre></div>
+<p>It is important the order is the same (price ASC, name ASC) will cause slower compared to (name ASC, price ASC)</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;indexingMode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;consistent&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;automatic&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="err">...</span>
+<span class="w">  </span><span class="nt">&quot;compositeIndexes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/name&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">//No scalar or wildcard</span>
+<span class="w">        </span><span class="nt">&quot;order&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ascending&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/price&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;order&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;descending&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">]</span>
+</code></pre></div>
+<h3 id="composite-index-ordering-and-search">Composite Index Ordering and Search</h3>
+<ol>
+<li>Feature that have to be defined. But if only 1 field, defining either to composite index vs index path makes no difference(just fyi).</li>
+<li>Order of ORDER BY is important. Meaning if index is "timestamp ASC then Name ASC", only this <code>SELECT * FROM c WHERE c.timestamp=123123 AND c.name ="John"  ORDER BY c.timestamp ASC, c.name ASC</code> will work, NOT <code>SELECT * FROM c WHERE c.name="John" AND c.timestamp=123123  ORDER BY c.name ASC, c.timestamp ASC</code></li>
+<li>When query filter on multiple property, the equality filters MUST be the first property in composite index. What this means is, if the index is "timestamp ASC then Name ASC", this <code>SQL SELECT * FROM c WHERE c.timestamp &gt; 123123123 AND c.name = "John" ORDER BY c.timestamp ASC, c.name ASC</code> or john= AND timestamp &gt;, will NOT WORK. Only with c.timestamp = 123123123 will work. But if "name ASC, timestamp ASC" then <code>SQL SELECT * FROM c WHERE c.name="John" AND c.timestamp &gt; 123 ORDER BY c.name ASC, c.timestamp ASC</code>, will WORK.  The logic is order of index corresponds to equality. </li>
+<li>ASC, DESC must match for ORDER BY. See mix order.</li>
+<li>WHERE statement can exclude from filter, e.g. composite index is "name, age" the SQL <code>SELECT * from c where name="John" ORDER BY name ASC, age ASC</code> will work.</li>
+<li>Composite Index should not have /? or /* and is CASE-SENSITIVE. Also remember that tuple/array is not supported with composite index.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;indexingMode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Consistent&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;compositeIndexes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">[{</span>
+<span class="w">      </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="s2">&quot;/name&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;order&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ascending&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="s2">&quot;/age&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;order&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ascending&quot;</span>
+<span class="w">    </span><span class="p">}],</span>
+<span class="w">    </span><span class="p">[</span><span class="err">...</span><span class="p">]</span><span class="w"> </span><span class="c1">//NOTE: It&#39;s array of array.</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="mixing-composite-index-sort-order">Mixing composite index sort order</h3>
+<p>Cosmos DB's query engine can use a composite index in two ways:
+- <strong>Forward Scan</strong>: Reading the index in the defined order.
+- <strong>Backward Scan</strong>: Reading the index in the reverse of the defined order (e.g., an ASC index can serve a DESC query).
+- if you want to support both ASC,ASC and ASC,DESC; then create 2 composite index which will create more write RU but less read RU.</p>
+<table>
+<thead>
+<tr>
+<th>Index Definition</th>
+<th>Query Supported (Forward Scan)</th>
+<th>Query Supported (Backward Scan)</th>
+<th>Your Query → (DESC, ASC)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A: (ASC, DESC) (Working)</td>
+<td>(ASC, DESC)</td>
+<td>(DESC, ASC)</td>
+<td>Supported ✅</td>
+</tr>
+<tr>
+<td>B: (DESC, DESC) (Non-Working)</td>
+<td>(DESC, DESC)</td>
+<td>(ASC, ASC)</td>
+<td>Not Supported ❌</td>
+</tr>
+<tr>
+<td>C: (ASC, ASC)</td>
+<td>(ASC, ASC)</td>
+<td>(DESC, DESC)</td>
+<td>Not Supported ❌</td>
+</tr>
+<tr>
+<td>D: (DESC, ASC)</td>
+<td>(DESC, ASC)</td>
+<td>(ASC, DESC)</td>
+<td>Supported ✅</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mix-order-of-2-eg-age-asc-name-desc-gender-asc">Mix order of &gt; 2. E.g. age ASC, name DESC, gender ASC.</h3>
+<p>Supported is only, all other are not supported. I.e. <strong>FULL INVERTED</strong>
+- age DESC, name ASC and gender DESC
+- age ASC, name DESC and gender ASC</p>
+<h2 id="indexing-with-order-by">Indexing with ORDER BY</h2>
+<p>An ORDER BY clause that orders by a single property always needs a range index and fails if the path it references doesn't have one. Similarly, an ORDER BY query that orders by multiple properties always needs a composite index.</p>
+<p>If indexing of single field or composite index of multi-field is not properly defined, an error " The order by query does not have a corresponding composite index/index that it can be served from" is thrown.</p>
+<table>
+<thead>
+<tr>
+<th>Description</th>
+<th>Sample</th>
+<th>Error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single field, requires at least index includedPath/compositeIndex</td>
+<td>SELECT * FROM p ORDER BY p.category</td>
+<td>"The index path corresponding to the specified order-by item is excluded."</td>
+</tr>
+<tr>
+<td>&gt; 1 field, requires a compositeIndex</td>
+<td>SELECT * FROM p ORDER BY p.category, p.name</td>
+<td>The order by query does not have a corresponding composite index that it can be served from.</td>
+</tr>
+</tbody>
+</table>
+<p>Creating composite index</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;indexingMode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;consistent&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;automatic&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;includedPaths&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/*&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;excludedPaths&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/\&quot;_etag\&quot;/?&quot;</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="err">ca</span><span class="kc">n</span><span class="w"> </span><span class="err">use</span><span class="w"> </span><span class="s2">&quot;/_etag/?&quot;</span><span class="w"> </span><span class="err">i</span><span class="kc">n</span><span class="w"> </span><span class="err">mos</span><span class="kc">t</span><span class="w"> </span><span class="err">sdk.</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;compositeIndexes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/name&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;order&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ascending&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/price&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;order&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;descending&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Note the escaped double quotes (/\"_etag\"/?). Because _etag is a system property with a leading underscore, the indexing engine requires the property name to be quoted in the path string to ensure it is parsed correctly.
+It is also possible path: "_etag" in some codes, like data explorer.</p>
+<h2 id="scanning-methods-due-to-indexingpartition-keyid">Scanning methods due to indexing/partition key/id</h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+<th>RU implication</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Index seek</td>
+<td>The query engine will seek an exact match on a field’s value by traversing directly to that value and looking up how many items match. Once the matched items are determined, the query engine will return the items as the query result.</td>
+<td>The RU charge is constant for the lookup. The RU charge for loading and returning items is linear based on the number of items.</td>
+</tr>
+<tr>
+<td>Index scan</td>
+<td>The query engine will find all possible values for a field and then perform various comparisons only on the values. Once matches are found, the query engine will load and return the items as the query result.</td>
+<td>The RU charge is still constant for the lookup, with a slight increase over the index seek based on the cardinality of the indexed properties. The RU charge for loading and returning items is still linear based on the number of items returned.</td>
+</tr>
+<tr>
+<td>Full scan</td>
+<td>The query engine will load the items, in their entirety, to the transactional store to evaluate the filters.</td>
+<td>This type of scan does not use the index; however, the RU charge for loading items is based on the number of items in the entire container.</td>
+</tr>
+</tbody>
+</table>
+<p>An index scan can range in complexity from an efficient and precise index seek, to a more involved expanded index scan, and finally the most complex full index scan.</p>
+<p>Full scans can potentially have significant request unit charges as the charge scales linearly with the total number of items in the container. While full scans are rare, it is essential to know that they are possible when using specific built-in functions in query filters.</p>
+<h2 id="debugging-index">Debugging Index</h2>
+<p>To debug indexing required, the SDK can be added with <em>PopulateIndexMetrics</em> and retrieve with method <strong>IndexMetrics</strong>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">QueryRequestOptions</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">PopulateIndexMetrics</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span>
+<span class="p">}</span>
+<span class="p">...</span>
+<span class="k">while</span><span class="p">(</span><span class="n">iterator</span><span class="p">.</span><span class="n">HasMoreResults</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">FeedResponse</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">iterator</span><span class="p">.</span><span class="n">ReadNextAsync</span><span class="p">();</span>
+<span class="w">    </span><span class="k">foreach</span><span class="p">(</span><span class="n">Product</span><span class="w"> </span><span class="n">product</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">response</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Do something with each product</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">IndexMetrics</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>It response with recommendation if there are:
+<div class="highlight"><pre><span></span><code>Index Utilization Information
+  Utilized Single Indexes
+    Index Spec: /price/?
+    Index Impact Score: High
+    ---
+    Index Spec: /name/?
+    Index Impact Score: High
+    ---
+  Potential Single Indexes
+  Utilized Composite Indexes
+  Potential Composite Indexes
+</code></pre></div></p>
+<h2 id="unique-key">Unique Key</h2>
+<p><strong>NOTE</strong>: 
+- Can only be created during container creation. YOU CANNOT change it.
+- Unique key works by partition</p>
+<p>For sharded collections, provide the shard (partition) key to create a unique index. All unique indexes on a sharded collection are <strong>compound indexes</strong>, and one of the fields is the shard key. The shard key should be the first field in the index definition.</p>
+<p>After you create a container with a unique key policy, the creation of a new item or an update of an existing item that results in a duplicate within a logical partition is prevented, as specified by the unique key constraint. The partition key combined with the unique key guarantees the uniqueness of an item within the scope of the container.</p>
+<p>https://learn.microsoft.com/en-us/azure/cosmos-db/unique-keys</p>
+<p>E.g, given that the partition key is "category"
+<div class="highlight"><pre><span></span><code><span class="p">[</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sample&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;category&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;demo&quot;</span>
+<span class="p">},</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sample&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;category&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;demo&quot;</span>
+<span class="p">},</span><span class="w"> </span><span class="c1">//this fails</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sample&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;category&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;demo-2&quot;</span>
+<span class="p">},</span><span class="w"> </span><span class="c1">//passes</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sample-2&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;category&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;demo&quot;</span>
+<span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div></p>
+<h2 id="partition-and-index">Partition and Index</h2>
+<ol>
+<li>Index can suddenly grow during partition and will release after partition completed.</li>
+<li>Partition key is always indexed (unless it's "/id")!! Don't need to explictly set, unless is a composite key.</li>
+</ol>
+<h2 id="full-text-of-hybrid-search">Full-text of Hybrid search</h2>
+<p>Feature has to be manually "enabled".</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;indexingMode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;consistent&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;fullTextIndexes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">     </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/name&quot;</span>
+<span class="w">     </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="difference">Difference</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Full-Text Index</th>
+<th>Normal (Range/Composite) Index</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary Goal</td>
+<td>Efficiently search for words or phrases within large text fields and rank results by relevance.</td>
+<td>Efficiently filter data for exact matches, ranges, and sorting.</td>
+</tr>
+<tr>
+<td>Search Functionality</td>
+<td>Supports linguistic features like: tokenization (splitting text into words), stemming (searching for "run" finds "running"), stopword removal (ignoring "the," "a," etc.), and relevance scoring (e.g., using BM25).</td>
+<td>Supports simple comparisons: =, &gt;, &lt;, BETWEEN, ORDER BY, LIKE 'prefix%'.</td>
+</tr>
+<tr>
+<td>Index Structure</td>
+<td>Typically an Inverted Index, where each unique word (lexeme) in the document maps to the list of documents and positions where that word occurs.</td>
+<td>Typically a B-Tree or similar ordered structure, where the entire field value is indexed, allowing for fast ordered lookups.</td>
+</tr>
+<tr>
+<td>Cosmos DB Use</td>
+<td>Used with functions like FullTextContains, FullTextContainsAll, and for ranking results with ORDER BY RANK. (Available in the NoSQL API).</td>
+<td>Used to optimize all standard SQL queries (WHERE, ORDER BY, JOIN, GROUP BY).</td>
+</tr>
+<tr>
+<td>Complexity</td>
+<td>More complex to build and maintain due to text processing, but essential for search applications.</td>
+<td>Simpler, faster to build, and fundamental for database performance.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="tuple-indexing">Tuple Indexing</h2>
+<ol>
+<li>Meant for object array inclusion</li>
+<li>Must end with /?</li>
+<li>Is only for object array element. If only array with primitive values (e.g. [1,23]), use /events/[].</li>
+</ol>
+<p><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;indexingMode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;consistent&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;includePaths&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">       </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/addresses/[]/{/street1,/street2,/postcode}/?&quot;</span><span class="w"> </span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">       </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/city/[]/events/[]/name/?&quot;</span><span class="w"> </span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">       </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/city/[]/{[1],[3]}/?&quot;</span><span class="w"> </span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">       </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/events/[]/{name/?, category/?}/?&quot;</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="err">THIS</span><span class="w"> </span><span class="err">IS</span><span class="w"> </span><span class="err">INVALID</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span><span class="w"> </span>
+<span class="p">}</span>
+</code></pre></div>
+<em>Note: The path <code>/events/[]/{name/?, category/?}/?</code> is invalid.</em></p>
+<h2 id="adding-indexes">Adding indexes</h2>
+<ol>
+<li>Index transformation consumes RU.</li>
+<li>Removing an index takes effect immediately, adding takes time.</li>
+<li>For replace, best add new index and wait for it to complete before remove.</li>
+</ol>
+<h2 id="indexing-importance">Indexing Importance</h2>
+<ol>
+<li>TTL does not work with indexing policy set to NONE.</li>
+<li>OpenAI does not work with Index policy set to NONE.</li>
+</ol>
+<h2 id="lazy-mode-deprecated">Lazy mode (Deprecated)</h2>
+<p>Azure Cosmos DB also supports a Lazy indexing mode. Lazy indexing performs updates to the index at a much lower priority level when the engine is not doing any other work. This can result in inconsistent or incomplete query results. If you plan to query an Azure Cosmos DB container, you should not select lazy indexing. New containers cannot select lazy indexing. You can request an exemption by contacting cosmosdbindexing@microsoft.com (except if you are using an Azure Cosmos DB account in <a href="https://learn.microsoft.com/en-us/azure/cosmos-db/serverless">serverless</a> mode which doesn't support lazy indexing).</p>
+<p><strong>This CANNOT be set with new container only can be set with Azure Support ticket.</strong></p>
+<div class="highlight"><pre><span></span><code>{ 
+  &quot;indexingMode&quot;: &quot;lazy&quot;
+}
+</code></pre></div>
+<h2 id="spatial-indexing">Spatial Indexing</h2>
+<p>Azure Cosmos DB supports the following spatial data types:</p>
+<ul>
+<li>Point</li>
+<li>LineString</li>
+<li>Polygon</li>
+<li>MultiPolygon</li>
+</ul>
+<h2 id="indexing-issues">Indexing issues.</h2>
+<p>Some issue of
+<div class="highlight"><pre><span></span><code>The key messages in your currentOp output are:
+
+msg: &#39;Index is waiting for commands to reach snapshot threshold.&#39;
+waitingForLock: true
+Progress: 99.99999935420965
+</code></pre></div></p>
+<ol>
+<li>Can be reaching RU limit as end of indexing it requires large RU. "Transformation throttles under heavy RU pressure near completion."</li>
+<li>Lock is not able to be obtained. https://learn.microsoft.com/en-us/answers/questions/5560614/how-to-fix-stuck-cosmos-db-for-mongodb-(vcore)-ind</li>
+</ol>
+<h2 id="type-of-indexes">Type of indexes</h2>
+<p>Note: As long as many fields involved it's composite, e.g. SELECT * FROM r ORDER BY y, z -or- SELECT * FROM r WHERE r.age=4 OR r.name='W' it's considered composite.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Desc</th>
+<th>Sample</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hash</td>
+<td>only for = match, even IN uses range</td>
+<td>SELECT DISTINCT(c.age) FROM c</td>
+</tr>
+<tr>
+<td>Range</td>
+<td>The default, only 1 field</td>
+<td>SELECT * FROM r WHERE r.city in ('MONTREAL', 'SAN FRANCISCO') ORDER BY r.city</td>
+</tr>
+<tr>
+<td>Spatial</td>
+<td>Special</td>
+<td>SELECT * FROM c WHERE ST_DISTANCE(c.location, { "type": "Point", "coordinates": [ -122.12, 47.67 ] }) &lt; 5000</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>kind: "Range" (Default)</th>
+<th>kind: "Hash"</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Supported Queries</td>
+<td>Equality, Range Filters (&lt;, &gt;), Sorting (ORDER BY)</td>
+<td>Equality Filters Only (=)</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>Excellent for range/sort, slightly higher write RU cost/storage.</td>
+<td>Excellent for equality, lower write RU cost/storage.</td>
+</tr>
+<tr>
+<td>Data Types</td>
+<td>Numbers, Strings</td>
+<td>Numbers, Strings</td>
+</tr>
+<tr>
+<td>Use Case</td>
+<td>Most common properties, especially for sorting and time-based queries.</td>
+<td>Properties only ever used for simple lookups (e.g., status codes, exact names).</td>
+</tr>
+</tbody>
+</table>
+<p>Range type can be defined in index policy
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;indexingMode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;consistent&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// Use &quot;consistent&quot; for up-to-date queries</span>
+<span class="w">  </span><span class="nt">&quot;automatic&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;includedPaths&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// The partition key is often included here if you need to query on it</span>
+<span class="w">      </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/myPartitionKey/?&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">      </span><span class="nt">&quot;indexes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;kind&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hash&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// Explicitly define the index type as Hash</span>
+<span class="w">          </span><span class="nt">&quot;dataType&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;String&quot;</span><span class="w"> </span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// Another property where only equality checks are needed</span>
+<span class="w">      </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/categoryName/?&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">      </span><span class="nt">&quot;indexes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;kind&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hash&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">          </span><span class="nt">&quot;dataType&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;String&quot;</span><span class="w"> </span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;excludedPaths&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/*&quot;</span><span class="w"> </span><span class="c1">// Exclude everything else by default (Selective Indexing)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<h2 id="to-digest">To digest.</h2>
+<p>Mix is good for asc, desc on different fields. But it's still more efficient to define the order.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&quot;compositeIndexes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="c1">// Index 1 for the first query (DESC, ASC)</span>
+<span class="w">    </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/name&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;order&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;descending&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/age&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;order&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ascending&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="c1">// Index 2 for the second query (ASC, DESC)</span>
+<span class="w">    </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/name&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;order&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ascending&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/age&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;order&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;descending&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">]</span>
+</code></pre></div>
+<h2 id="check-index-progress">Check Index progress</h2>
+<ol>
+<li>What's needed is that to read from container with <strong>populateQuotaInfo</strong> = true.</li>
+<li>From there there is a header of x-ms-documentdb-collection-index-transformation-progress to retrieve the info.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="c1">// We must pass the option to explicitly request quota/system information</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">resource</span><span class="p">,</span><span class="w"> </span><span class="nx">headers</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">container</span><span class="p">.</span><span class="nx">read</span><span class="p">({</span>
+<span class="w">      </span><span class="nx">populateQuotaInfo</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="p">});</span>
+
+<span class="w">    </span><span class="c1">// The index transformation progress is stored in this specific header.</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">indexProgressHeader</span><span class="w"> </span><span class="o">=</span>
+<span class="w">      </span><span class="s2">&quot;x-ms-documentdb-collection-index-transformation-progress&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">progress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">headers</span><span class="p">[</span><span class="nx">indexProgressHeader</span><span class="p">];</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">progress</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`✅ Indexing Progress: </span><span class="si">${</span><span class="nx">progress</span><span class="si">}</span><span class="sb">%`</span><span class="p">);</span>
+
+<span class="cm">/** Output is integer </span>
+
+<span class="cm">✅ Indexing Progress: 0%</span>
+<span class="cm">✅ Indexing Progress: 100%</span>
+<span class="cm">**/</span>
+</code></pre></div>
+<h2 id="partition-key">Partition key</h2>
+<p>Partition keys are automatically indexed in Cosmos DB, so there’s no need to explicitly include them in your indexing paths. This ensures that queries filtering by the partition key are efficient by default.</p>
+<h2 id="force-query-on-non-indexed-path">Force query on non-indexed path</h2>
+<p>If you run a query on non-index path. E.g. SELECT * FROM p WHERE p.name='test' and name is not indexed. The search will throw an error <em>"The provided query requires a scan but ScanInQuery was not enabled."</em>.</p>
+<p>Here comes the handy dandy, <strong>EnableScanInQuery = true</strong>. The primary reason to use EnableScanInQuery is for queries where the specified paths are not indexed or if you have opted out of indexing on certain document paths. Without this flag, such queries would fail. </p>
+<div class="highlight"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">queryable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="n">CreateDocumentQuery</span><span class="o">&lt;</span><span class="n">Book</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="w">    </span><span class="n">collectionLink</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">QueryRequestOptions</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">EnableScanInQuery</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> </span><span class="p">})</span>
+<span class="w">  </span><span class="p">.</span><span class="n">Where</span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">Price</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1000</span><span class="p">);</span>
+</code></pre></div>
+<h2 id="few-more-indexing-tricks">Few more indexing tricks</h2>
+<p>A command using SDK with <code>db.coll.createIndex({"children.$**" : 1})</code>, https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/indexing#wildcard-indexes</p>
+<ol>
+<li>Unique Indexes - this is called by code and only support:
+    a. No array
+    b. Nested fields are supported if no array 
+    c. If there is a shard key, have to include shard key during creation
+    d. This unique index cannot be created on existing collection if Continuous Backup is enabled. The only way to create is to create it when collection is created; so the option is to migrate the data or start from empty(only MongoDB supports empty, noSQL is only on create.).</li>
+<li>Wildcard Indexes - To make query easier, it's similar to put as includedPaths actually. Limitation:
+    a. No compound
+    b. TTL, unique fields
+    c. No mongoDB behaviour to include/exclude.</li>
+</ol>
+<p><div class="highlight"><pre><span></span><code>az<span class="w"> </span>cosmosdb<span class="w"> </span>sql<span class="w"> </span>container<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--resource-group<span class="w"> </span>&lt;myRG&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--account-name<span class="w"> </span>&lt;myAccount&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--database-name<span class="w"> </span>&lt;myDatabase&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>&lt;myContainer&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--partition-key-path<span class="w"> </span><span class="s2">&quot;/userId&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--unique-key-policy<span class="w"> </span><span class="s1">&#39;{&quot;uniqueKeys&quot;: [{&quot;paths&quot;: [&quot;/userEmail&quot;]}]}&#39;</span>
+</code></pre></div>
+<img alt="Wildcard Index" src="../img/indexing_wildcard.png" /></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
