@@ -5,7 +5,7 @@ Welcome! These are my notes for my DP-420 study references. It may not contain a
 These notes are open to the community to contribute and improve. I do use it as reference for my work as my team uses Azure Cosmos DB.
 
 ## 📖 Table of Contents
-Currently migrating notes from [DP-420 Azure CosmosDB Study Guide](https://github.com/users/yoonghan/projects/9)
+Visit [DP-420 Azure CosmosDB Study Guide](https://yoonghan.github.io/Azure-Cosmos-DB-DP-420/) for latest update.
 
 ## 🚀 How to Contribute
 I am actively looking for peer reviews and updates! If you’ve recently taken the exam or found a better way to implement a pattern, please contribute:
