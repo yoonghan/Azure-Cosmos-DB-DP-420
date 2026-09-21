@@ -17,7 +17,7 @@ The notes are open for community contribution and meant to cover key concepts in
 
 1.  **Prerequisites**: Python 3.x is required.
 2.  **Dependencies**: Install the required package using `pip install mkdocs-material`.
-3.  **Local Preview**: Run `mkdocs serve` in the project root to start a live-reloading local development server.
+3.  **Local Preview**: Changes from agent do not require rebuild. Run `mkdocs serve` in the project root to start a live-reloading local development server only if user requested.
 4.  **Content Structure**: When adding new pages, ensure you update the `nav` structure in `mkdocs.yml`.
 5.  **Markdown Extensions**: The project utilizes extensions like `admonition` (to create hints, notes, tips), `pymdownx.details`, and `pymdownx.superfences` to enhance markdown formatting.
 
