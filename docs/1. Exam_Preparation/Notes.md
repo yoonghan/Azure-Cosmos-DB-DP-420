@@ -14,7 +14,9 @@
     - No Strong consistency - strong consistency cannot be supported
     - Cassandra API cannot support it
 
-3. Do Labs, reasons to do:
+3. Create container requires '--partition-key-path'
+
+4. Do Labs, reasons to do:
     - Remember the steps and order, like Azure AI Search, you need to create data source, index, indexer.
     - Understand on roles required for each step, like for Azure AI Search, you need to have Contributor role for CosmosDB to create data source.
     - Try focusing on the UI parameters aside the main one, like Periodic backup there are options to select LRS, GRS or ZRS.
